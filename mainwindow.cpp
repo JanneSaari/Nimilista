@@ -55,12 +55,10 @@ void MainWindow::createMenus()
 
     ticketMenu = menuBar()->addMenu(tr("&Aterialiput"));
     printAct = new QAction(tr("&Tee PDF"), this);
-//    openImageAct = new QAction(tr("Avaa kuva..."), this);
 
     ticketMenu->addAction(printAct);
-//    ticketMenu->addAction(openImageAct);
 
-    //----------------------------------------------------
+
     QActionGroup* departmentGroup = new QActionGroup(this);
     QMenu* testiMenu = ticketMenu->addMenu(tr("Pajan valinta"));
     QAction* ITPajaAction = testiMenu->addAction(tr("IT-paja"));
@@ -104,10 +102,8 @@ void MainWindow::createMenus()
     {
         setDepartment("Hoivapaja");
     });
-    //------------------------------------------------------
 
     connect(printAct, &QAction::triggered, namelistWidget, &NamelistWidget::printMealTickets);
-//    connect(openImageAct, &QAction::triggered, namelistWidget, &NamelistWidget::)
 }
 
 void MainWindow::updateActions(const QItemSelection &selection)

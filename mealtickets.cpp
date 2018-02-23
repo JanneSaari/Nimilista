@@ -36,7 +36,13 @@ int MealTickets::paintImages(QPrinter &printer)
     //Use it to print full page of empty tickets and fill info if needed.
     //ATM this function prints images for each person in listOfPeople,
     //who are attending today. And after that, fills rest of the page with empty images.
+
+    //Logo printing is commented out and indicated by LOGO comment
+    //Logon piirtäminen on kommentoitu pois ja merkitty kommentilla //LOGO
+    //Logon piirtämisen PITÄISI toimia, kun kaikki //LOGO merkityt kohdat on otettu pois kommenteista.
     QImage image(QDir::currentPath().append("/lippu.png"));
+    //QImage logo(QDir::currentPath().append(/logo.png)); //LOGO
+
 
     QPainter painter;
     if(!painter.begin(&printer)) {
@@ -44,16 +50,12 @@ int MealTickets::paintImages(QPrinter &printer)
         return 1;
     }
 
-    //--------------------------------
-    //TODO add menu for paja selection
-    //TODO make QPen for paja printing
-    //Vihreä #19A146
-    //Harmaa #6F6F6E
-    //fontti Myriad Pro
+    //Green font color #19A146 (used to print department)
+    //Grey font color #6F6F6E (not used at the moment)
+    //font Myriad Pro
     QColor testiColor("#19A146");
     QPen defaultPen;
     QPen testiPen(testiColor);
-    //-------------------------------
 
     QRectF pageSize = printer.pageRect();
     QPoint imagePlacement(0.0, 0.0);
@@ -69,6 +71,9 @@ int MealTickets::paintImages(QPrinter &printer)
     QPointF monthPlacement(imageSizeOnPage.width() / 2.3, imageSizeOnPage.height() / 1.38);
     QPointF yearPlacement(imageSizeOnPage.width() / 1.75, imageSizeOnPage.height() / 1.38);
     QPointF PajaPlacement(imageSizeOnPage.width() / 7.6, imageSizeOnPage.height() / 2.30);
+    //Vaihda sopivaan kohtaan suhteessa lippuun.
+    //Argumentit ovat vasen ylänurkka ja oikea alanurkka
+    //QRectF logoPlacement(0.0, 0.0); //LOGO
     int dayOfWeek = getDayOfTheWeek();
 
     int imagesOnRow = 0;
@@ -95,7 +100,7 @@ int MealTickets::paintImages(QPrinter &printer)
                     painter.resetTransform();
             }
             painter.drawImage(target, image, imageSourceSize);
-            //
+            //painter.drawImage(logoPlacement, logo, logo.size()); //LOGO
             painter.drawText(textPlacement, person.name);
             painter.drawText(dayPlacement, QDate::currentDate().toString("d"));
             painter.drawText(monthPlacement, QDate::currentDate().toString("M"));
@@ -117,6 +122,7 @@ int MealTickets::paintImages(QPrinter &printer)
         }
         if(rowsOnPage <4 &&imagesOnRow < 3)
             painter.drawImage(target, image, imageSourceSize);
+            //painter.drawImage(logoPlacement, logo, logo.size()); //LOGO
             painter.setPen(testiPen);
             painter.setFont(QFont("Myriad Pro", 12));
             painter.drawText(PajaPlacement, department);
