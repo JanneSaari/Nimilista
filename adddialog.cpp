@@ -109,7 +109,8 @@ void AddDialog::updateWorkstationList()
             if(occupiedEveningWorkstations.contains(testi)) {
                 workstationButtonGroup->button(0)->setChecked(true);
                 workstationButtonGroup->button(iii)->setEnabled(false);
-//                workstationButtonGroup->button(iii)->setText("qweqe");
+                //Setting name to occupied workstations works, but it makes dialog box too big and editing doesn't work correctly.
+//                workstationButtonGroup->button(iii)->setText(occupiedEveningWorkstations.at(occupiedEveningWorkstations.indexOf(testi)).name);
             }
             else {
                 workstationButtonGroup->button(iii)->setEnabled(true);
@@ -122,6 +123,7 @@ void AddDialog::updateWorkstationList()
             if(occupiedMorningWorkstations.contains(testi)) {
                 workstationButtonGroup->button(0)->setChecked(true);
                 workstationButtonGroup->button(iii)->setEnabled(false);
+//                workstationButtonGroup->button(iii)->setText(occupiedMorningWorkstations.at(occupiedMorningWorkstations.indexOf(testi)).name);
             }
             else {
                 workstationButtonGroup->button(iii)->setEnabled(true);
