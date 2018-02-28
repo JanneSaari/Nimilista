@@ -1,6 +1,9 @@
 #ifndef PERSON_H
 #define PERSON_H
 
+#include <QString>
+#include <QDataStream>
+
 class Person
 {
 public:
@@ -14,9 +17,10 @@ public:
     bool isFriday;
     QString information;
 
-    Person(QString name = "Esimerkki",  int workstation = 1, bool isEvening = false,
-           bool isMonday = false, bool isTuesday = false, bool isWednesday = false,
-           bool isThursday = false, bool isFriday = false, QString information = "Esimerkki tekstiä");
+    Person();
+//    Person(QString name = "Esimerkki",  int workstation = 1, bool isEvening = false,
+//           bool isMonday = false, bool isTuesday = false, bool isWednesday = false,
+//           bool isThursday = false, bool isFriday = false, QString information = "Esimerkki tekstiä");
 
     bool operator==(const Person &other) const
     {

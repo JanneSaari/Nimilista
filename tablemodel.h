@@ -5,43 +5,45 @@
 #include <QList>
 #include <QBitArray>
 
-struct Person
-{
-    QString name;
-    int workstation;
-    bool isEvening;
-    bool isMonday;
-    bool isTuesday;
-    bool isWednesday;
-    bool isThursday;
-    bool isFriday;
-    QString information;
+#include "person.h"
 
-    Person(QString name = "Esimerkki",  int workstation = 1, bool isEvening = false,
-           bool isMonday = false, bool isTuesday = false, bool isWednesday = false,
-           bool isThursday = false, bool isFriday = false, QString information = "Esimerkki tekstiä");
+//struct Person
+//{
+//    QString name;
+//    int workstation;
+//    bool isEvening;
+//    bool isMonday;
+//    bool isTuesday;
+//    bool isWednesday;
+//    bool isThursday;
+//    bool isFriday;
+//    QString information;
 
-    bool operator==(const Person &other) const
-    {
-        return name == other.name && workstation == other.workstation && isEvening == other.isEvening
-                && isMonday == other.isMonday && isTuesday == other.isTuesday && isWednesday == other.isWednesday
-                && isThursday == other.isThursday && isFriday == other.isFriday &&information == other.information;
-    }
-};
+//    Person(QString name = "Esimerkki",  int workstation = 1, bool isEvening = false,
+//           bool isMonday = false, bool isTuesday = false, bool isWednesday = false,
+//           bool isThursday = false, bool isFriday = false, QString information = "Esimerkki tekstiä");
 
-inline QDataStream &operator<<(QDataStream &stream, const Person &person)
-{
-    return stream << person.name << person.workstation << person.isEvening
-                  << person.isMonday << person.isTuesday << person.isWednesday
-                  << person.isThursday << person.isFriday << person.information;
-}
+//    bool operator==(const Person &other) const
+//    {
+//        return name == other.name && workstation == other.workstation && isEvening == other.isEvening
+//                && isMonday == other.isMonday && isTuesday == other.isTuesday && isWednesday == other.isWednesday
+//                && isThursday == other.isThursday && isFriday == other.isFriday &&information == other.information;
+//    }
+//};
 
-inline QDataStream &operator>>(QDataStream &stream, Person &person)
-{
-    return stream >> person.name >> person.workstation >> person.isEvening
-                  >> person.isMonday >> person.isTuesday >> person.isWednesday
-                  >> person.isThursday >> person.isFriday >> person.information;
-}
+//inline QDataStream &operator<<(QDataStream &stream, const Person &person)
+//{
+//    return stream << person.name << person.workstation << person.isEvening
+//                  << person.isMonday << person.isTuesday << person.isWednesday
+//                  << person.isThursday << person.isFriday << person.information;
+//}
+
+//inline QDataStream &operator>>(QDataStream &stream, Person &person)
+//{
+//    return stream >> person.name >> person.workstation >> person.isEvening
+//                  >> person.isMonday >> person.isTuesday >> person.isWednesday
+//                  >> person.isThursday >> person.isFriday >> person.information;
+//}
 
 class TableModel : public QAbstractTableModel
 {
@@ -60,17 +62,17 @@ public:
     bool removeRows(int position, int rows, const QModelIndex &index = QModelIndex()) override;
     QList<Person> getPeople() const;
     void resetTable();
-    void setWorkstation(const Person person);
-    void freeWorkstation(const Person person);
-    int getNumberOfWorkstations();
-    QVector<int> getFreeMorningWorkstations() const;
-    QVector<int> getFreeEveningWorkstations() const;
+//    void setWorkstation(const Person person);
+//    void freeWorkstation(const Person person);
+//    int getNumberOfWorkstations();
+//    QVector<int> getFreeMorningWorkstations() const;
+//    QVector<int> getFreeEveningWorkstations() const;
 
 private:
     QList<Person> listOfPeople;
-    QVector<int> freeMorningWorkstations;
-    QVector<int> freeEveningWorkstations;
-    int numberOfWorkstations = 50;
+//    QVector<int> freeMorningWorkstations;
+//    QVector<int> freeEveningWorkstations;
+//    int numberOfWorkstations = 50;
 };
 
 #endif // TABLEMODEL_H

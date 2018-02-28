@@ -8,7 +8,10 @@ AddDialog::AddDialog(NamelistWidget *parent)
     : parent(parent)
 
 {
-    numberOfWorkstations = parent->getNumberOfWorkstations();
+    numberOfWorkstations = parent->workstations->getNumberOfWorkstations();
+    occupiedEveningWorkstations = parent->workstations->getOccupiedEveningWorkstations();
+    occupiedMorningWorkstations = parent->workstations->getOccupiedMorningWorkstations();
+
     nameLabel = new QLabel("Nimi");
     informationLabel = new QLabel("Lisätietoa");
 
@@ -91,8 +94,6 @@ AddDialog::AddDialog(NamelistWidget *parent)
     connect(okButton, &QAbstractButton::clicked, this, &QDialog::accept);
     connect(cancelButton, &QAbstractButton::clicked, this, &QDialog::reject);
 
-    freeMorningWorkstations = parent->getFreeMorningWorkstations();
-    freeEveningWorkstations = parent->getFreeEveningWorkstations();
     connect(morning, &QRadioButton::toggled, this, &AddDialog::updateWorkstationList);
     morning->setChecked(true);
 
@@ -104,7 +105,8 @@ void AddDialog::updateWorkstationList()
     //TODO get name and display it
     if(evening->isChecked())
         for(int iii = 1; iii <= numberOfWorkstations; iii++) {
-            if(!freeEveningWorkstations.contains(iii)) {
+            OccupiedWorkstation testi(iii, " ");
+            if(occupiedEveningWorkstations.contains(testi)) {
                 workstationButtonGroup->button(0)->setChecked(true);
                 workstationButtonGroup->button(iii)->setEnabled(false);
 //                workstationButtonGroup->button(iii)->setText("qweqe");
@@ -116,7 +118,8 @@ void AddDialog::updateWorkstationList()
         }
     if(morning->isChecked())
         for(int iii = 1; iii <= numberOfWorkstations; iii++) {
-            if(!freeMorningWorkstations.contains(iii)) {
+            OccupiedWorkstation testi(iii, " ");
+            if(occupiedMorningWorkstations.contains(testi)) {
                 workstationButtonGroup->button(0)->setChecked(true);
                 workstationButtonGroup->button(iii)->setEnabled(false);
             }

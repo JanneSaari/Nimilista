@@ -3,7 +3,7 @@
 
 //Keeps track of status of the workstations.
 //If station is taken, save name of the occupier.
-//AddDialog uses this to disable selectors for already occupied workstations
+//AddDialog uses this to disable selectors for already occupied workstations.
 
 #include <QVector>
 
@@ -15,11 +15,16 @@ struct OccupiedWorkstation
     int workstation;
     QString name;
 
+    OccupiedWorkstation();
+    OccupiedWorkstation(const OccupiedWorkstation &occupiedWorkstation);
     OccupiedWorkstation(int workstation, QString name);
 
-    bool operator==(const int &other) const
+    inline bool operator==(const OccupiedWorkstation& other) const
     {
-        return workstation == other;
+        if(workstation == other.workstation)
+            return true;
+        else
+            return false;
     }
 };
 
@@ -37,7 +42,7 @@ private:
     //Used to keep track of the occupied workstations
     QVector<OccupiedWorkstation> morningWorkstations;
     QVector<OccupiedWorkstation> eveningWorkstations;
-    int numberOfWorkstations;
+    int numberOfWorkstations = 50;
 };
 
 #endif // WORKSTATIONS_H

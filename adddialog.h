@@ -11,6 +11,8 @@
 #include <QVector>
 #include <QGroupBox>
 
+#include "workstations.h"
+
 class QLabel;
 class QPushButton;
 class QTextEdit;
@@ -37,13 +39,9 @@ public:
     QCheckBox *wednesday;
     QCheckBox *thursday;
     QCheckBox *friday;
-
-//--------------------
-//    QVector<QRadioButton> radioButtonList;
     QGroupBox *workstationGroupBox;
     QButtonGroup *workstationButtonGroup;
     QRadioButton *workstationRadioButton;
-//---------------------
 
 private:
     NamelistWidget *parent;
@@ -54,10 +52,8 @@ private:
     QPushButton *okButton;
     QPushButton *cancelButton;
 
-    QVector<int> freeMorningWorkstations;
-    QVector<int> freeEveningWorkstations;
-    int previousValue;
-
+    QVector<OccupiedWorkstation> occupiedMorningWorkstations;
+    QVector<OccupiedWorkstation> occupiedEveningWorkstations;
     int numberOfWorkstations;
 
 private slots:

@@ -31,13 +31,14 @@ int MealTickets::printMealTickets()
 
 int MealTickets::paintImages(QPrinter &printer)
 {
-    //TODO cleanup this function. Take fill rest of the page
+    //TODO cleanup this function. Take "fill rest of the page"-part
     //from the end and make own function for it.
     //Use it to print full page of empty tickets and fill info if needed.
     //ATM this function prints images for each person in listOfPeople,
     //who are attending today. And after that, fills rest of the page with empty images.
 
-    //Logo printing is commented out and indicated by LOGO comment
+    //Logo printing is commented out and indicated by //LOGO comment
+
     //Logon piirtäminen on kommentoitu pois ja merkitty kommentilla //LOGO
     //Logon piirtämisen PITÄISI toimia, kun kaikki //LOGO merkityt kohdat on otettu pois kommenteista.
     QImage image(QDir::currentPath().append("/lippu.png"));

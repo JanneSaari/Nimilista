@@ -32,7 +32,8 @@ SOURCES += \
     newpersontab.cpp \
     adddialog.cpp \
     mealtickets.cpp \
-    workstations.cpp
+    workstations.cpp \
+    person.cpp
 
 HEADERS += \
         mainwindow.h \
