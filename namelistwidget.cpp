@@ -69,6 +69,7 @@ void NamelistWidget::addEntry(Person person)
 
 void NamelistWidget::editEntry()
 {
+    //TODO cleanup this function to smaller ones
     {
         QTableView *temp = static_cast<QTableView*>(currentWidget());
         QSortFilterProxyModel *proxy = static_cast<QSortFilterProxyModel*>(temp->model());

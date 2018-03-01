@@ -80,7 +80,7 @@ void MainWindow::createMenus()
 
     //Have to use lambda function to bind function with arguments to action.
     //There may be better way, but this works for now.
-    //Look for the way to bind namelistWdiget->setDepartment()
+    //Look for the way to bind namelistWidget->setDepartment()
     //instead of passing the QString around
     connect(ITPajaAction, &QAction::triggered, [this]()
     {
