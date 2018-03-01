@@ -3,24 +3,6 @@
 TableModel::TableModel(QObject *parent)
     : QAbstractTableModel(parent)
 {
-    for(int iii = 1; iii <= numberOfWorkstations; iii++) {
-        freeEveningWorkstations.append(iii);
-        freeMorningWorkstations.append(iii);
-    }
-
-//    for(int iii = 0; iii < 5; ++iii)
-//        eveningWorkstations.append(QBitArray(numberOfWorkstations, false));
-//    for(int iii = 0; iii < 5; ++iii)
-//        morningWorkstations.append(QBitArray(numberOfWorkstations, false));
-}
-
-Person::Person(QString name,  int workstation, bool isEvening,
-               bool isMonday, bool isTuesday, bool isWednesday,
-               bool isThursday, bool isFriday, QString information)
-    :name(name), workstation(workstation), isEvening(isEvening)
-    , isMonday(isMonday), isTuesday(isTuesday), isWednesday(isWednesday)
-    , isThursday(isThursday), isFriday(isFriday), information(information)
-{
 }
 
 int TableModel::rowCount(const QModelIndex &parent) const
@@ -138,7 +120,6 @@ bool TableModel::removeRows(int position, int rows, const QModelIndex &index)
     beginRemoveRows(QModelIndex(), position, position + rows - 1);
 
     for (int row = 0; row < rows; ++row){
-        freeWorkstation(listOfPeople.at(position));
         listOfPeople.removeAt(position);
     }
     endRemoveRows();
@@ -201,49 +182,49 @@ void TableModel::resetTable()
         removeRows(0, listOfPeople.size(), QModelIndex());
 }
 
-void TableModel::setWorkstation(const Person person)
-{
-    if(person.isEvening) {
-        if(freeEveningWorkstations.contains(person.workstation)) {
-            int index = freeEveningWorkstations.indexOf(person.workstation);
-            freeEveningWorkstations.removeAt(index);
-        }
-    }
-    else if(!person.isEvening) {
-        if(freeMorningWorkstations.contains(person.workstation)) {
-            int index = freeMorningWorkstations.indexOf(person.workstation);
-            freeMorningWorkstations.removeAt(index);
-        }
-    }
-}
+//void TableModel::setWorkstation(const Person person)
+//{
+//    if(person.isEvening) {
+//        if(freeEveningWorkstations.contains(person.workstation)) {
+//            int index = freeEveningWorkstations.indexOf(person.workstation);
+//            freeEveningWorkstations.removeAt(index);
+//        }
+//    }
+//    else if(!person.isEvening) {
+//        if(freeMorningWorkstations.contains(person.workstation)) {
+//            int index = freeMorningWorkstations.indexOf(person.workstation);
+//            freeMorningWorkstations.removeAt(index);
+//        }
+//    }
+//}
 
-void TableModel::freeWorkstation(const Person person)
-{
-    if(person.isEvening) {
-        if(!freeEveningWorkstations.contains(person.workstation))
-            freeEveningWorkstations.append(person.workstation);
-    }
-    else if(!person.isEvening) {
-        if(!freeMorningWorkstations.contains(person.workstation))
-            freeMorningWorkstations.append(person.workstation);
-    }
+//void TableModel::freeWorkstation(const Person person)
+//{
+//    if(person.isEvening) {
+//        if(!freeEveningWorkstations.contains(person.workstation))
+//            freeEveningWorkstations.append(person.workstation);
+//    }
+//    else if(!person.isEvening) {
+//        if(!freeMorningWorkstations.contains(person.workstation))
+//            freeMorningWorkstations.append(person.workstation);
+//    }
 
-}
+//}
 
-int TableModel::getNumberOfWorkstations()
-{
-    return numberOfWorkstations;
-}
+//int TableModel::getNumberOfWorkstations()
+//{
+//    return numberOfWorkstations;
+//}
 
-QVector<int> TableModel::getFreeMorningWorkstations() const
-{
-    return freeMorningWorkstations;
-}
+//QVector<int> TableModel::getFreeMorningWorkstations() const
+//{
+//    return freeMorningWorkstations;
+//}
 
-QVector<int> TableModel::getFreeEveningWorkstations() const
-{
-    return freeEveningWorkstations;
-}
+//QVector<int> TableModel::getFreeEveningWorkstations() const
+//{
+//    return freeEveningWorkstations;
+//}
 
 
 

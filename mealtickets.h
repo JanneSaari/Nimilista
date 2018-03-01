@@ -7,7 +7,8 @@
 
 #include <QPainter>
 #include <QPrinter>
-#include <tablemodel.h>
+
+#include <person.h>
 #include "namelistwidget.h"
 
 class MealTickets

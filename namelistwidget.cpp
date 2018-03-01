@@ -9,6 +9,7 @@ NamelistWidget::NamelistWidget(MainWindow *parent)
     : parent(parent)
 {
     table = new TableModel(this);
+    workstations = new Workstations();
     setupNamelist();
 }
 
@@ -37,7 +38,7 @@ void NamelistWidget::addEntry(Person person)
 {
 
     //TODO check only if name matches
-    if (!table->getPeople().contains({person.name})) {
+    if (!table->getPeople().contains(person)) {
         table->insertRows(0, 1, QModelIndex());
 
         QModelIndex index = table->index(0, 0, QModelIndex());
@@ -59,7 +60,7 @@ void NamelistWidget::addEntry(Person person)
         index = table->index(0, 8, QModelIndex());
         table->setData(index, person.information, Qt::EditRole);
 
-        table->setWorkstation(person);
+        workstations->setWorkstation(person);
 
     } else if(!readingFromFile){
         QMessageBox::information(this, tr("Duplicate Name"),
@@ -138,6 +139,11 @@ void NamelistWidget::editEntry()
         //and set new values if they changed
         Person newValues;
         if (aDialog.exec()) {
+            newValues.name = aDialog.nameText->text();
+            if (newValues.name!= person.name) {
+                QModelIndex index = table->index(row, 0, QModelIndex());
+                table->setData(index, QVariant(newValues.name), Qt::EditRole);
+            }
             newValues.workstation = aDialog.workstationButtonGroup->checkedId();
             if (newValues.workstation!= person.workstation) {
                 QModelIndex index = table->index(row, 1, QModelIndex());
@@ -179,8 +185,8 @@ void NamelistWidget::editEntry()
                 table->setData(index, newValues.information, Qt::EditRole);
             }
         }
-        table->freeWorkstation(person);
-        table->setWorkstation(newValues);
+        workstations->freeWorkstation(person);
+        workstations->setWorkstation(newValues);
     }
 }
 
@@ -194,6 +200,7 @@ void NamelistWidget::removeEntry()
 
     foreach (QModelIndex index, indexes) {
         int row = proxy->mapToSource(index).row();
+        workstations->freeWorkstation(table->getPeople().at(row));
         table->removeRows(row, 1, QModelIndex());
     }
 }
@@ -273,21 +280,6 @@ void NamelistWidget::printMealTickets()
 }
 
 //Getters
-QVector<int> NamelistWidget::getFreeMorningWorkstations() const
-{
-    return table->getFreeMorningWorkstations();
-}
-
-QVector<int> NamelistWidget::getFreeEveningWorkstations() const
-{
-    return table->getFreeEveningWorkstations();
-}
-
-int NamelistWidget::getNumberOfWorkstations() const
-{
-    return table->getNumberOfWorkstations();
-}
-
 QString NamelistWidget::getDepartment() const
 {
     return parent->getDepartment();

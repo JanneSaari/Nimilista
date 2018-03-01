@@ -31,7 +31,9 @@ SOURCES += \
     namelistwidget.cpp \
     newpersontab.cpp \
     adddialog.cpp \
-    mealtickets.cpp
+    mealtickets.cpp \
+    workstations.cpp \
+    person.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -39,7 +41,9 @@ HEADERS += \
     namelistwidget.h \
     newpersontab.h \
     adddialog.h \
-    mealtickets.h
+    mealtickets.h \
+    person.h \
+    workstations.h
 
 FORMS += \
         mainwindow.ui
