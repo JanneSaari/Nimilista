@@ -21,6 +21,10 @@ int MealTickets::printMealTickets()
     printer.setOutputFormat(QPrinter::PdfFormat);
     printer.setOrientation(QPrinter::Landscape);
     printer.setResolution(300);
+    //TODO choose where to save pdf file
+    //QFileDialog opens the file selection popup adn returns QString
+    QFile pdfFile;
+    //---------------------------------
     printer.setOutputFileName(QDir::currentPath().append("/aterialiput.pdf"));
     if(paintImages(printer)) {
         qWarning("Kuvia ei pystytty piirtämään");
@@ -133,7 +137,6 @@ int MealTickets::paintImages(QPrinter &printer)
             imagesOnRow++;
     }
     painter.end();
-
     return 0;
 }
 

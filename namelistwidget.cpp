@@ -138,6 +138,11 @@ void NamelistWidget::editEntry()
         //and set new values if they changed
         Person newValues;
         if (aDialog.exec()) {
+            newValues.name = aDialog.nameText->text();
+            if (newValues.name!= person.name) {
+                QModelIndex index = table->index(row, 0, QModelIndex());
+                table->setData(index, QVariant(newValues.name), Qt::EditRole);
+            }
             newValues.workstation = aDialog.workstationButtonGroup->checkedId();
             if (newValues.workstation!= person.workstation) {
                 QModelIndex index = table->index(row, 1, QModelIndex());
@@ -194,8 +199,8 @@ void NamelistWidget::removeEntry()
 
     foreach (QModelIndex index, indexes) {
         int row = proxy->mapToSource(index).row();
+        workstations->freeWorkstation(table->getPeople().at(row));
         table->removeRows(row, 1, QModelIndex());
-        workstations->freeWorkstation(table->getPeople().at(index.row()));
     }
 }
 
