@@ -46,8 +46,7 @@ int MealTickets::paintImages(QPrinter &printer)
     //Logon piirtäminen on kommentoitu pois ja merkitty kommentilla //LOGO
     //Logon piirtämisen PITÄISI toimia, kun kaikki //LOGO merkityt kohdat on otettu pois kommenteista.
     QImage image(QDir::currentPath().append("/lippu.png"));
-    // QImage logo(QDir::currentPath().append("/logo.png")); //LOGO
-
+    //QImage logo(QDir::currentPath().append("/logo.png")); //LOGO
 
     QPainter painter;
     if(!painter.begin(&printer)) {
@@ -75,10 +74,12 @@ int MealTickets::paintImages(QPrinter &printer)
     QPointF dayPlacement(imageSizeOnPage.width() / 3.1, imageSizeOnPage.height() / 1.38);
     QPointF monthPlacement(imageSizeOnPage.width() / 2.3, imageSizeOnPage.height() / 1.38);
     QPointF yearPlacement(imageSizeOnPage.width() / 1.75, imageSizeOnPage.height() / 1.38);
-    QPointF PajaPlacement(imageSizeOnPage.width() / 7.6, imageSizeOnPage.height() / 2.30);
+    QPointF departmentPlacement(imageSizeOnPage.width() / 7.6, imageSizeOnPage.height() / 2.30);
+    //logoPlacement is position of the logo (upper left corner, lower right corner)
     //Vaihda sopivaan kohtaan suhteessa lippuun.
-    //Argumentit ovat vasen ylänurkka ja oikea alanurkka
-    //QRectF logoPlacement(0.0, 0.0); //LOGO
+    //Argumentit logoPlacementissa ovat (vasen ylänurkka, oikea alanurkka)
+    //QRectF logoPlacement(QPointF(150.0, 20.0), ); //LOGO
+
     int dayOfWeek = getDayOfTheWeek();
 
     int imagesOnRow = 0;
@@ -105,14 +106,14 @@ int MealTickets::paintImages(QPrinter &printer)
                     painter.resetTransform();
             }
             painter.drawImage(target, image, imageSourceSize);
-            //painter.drawImage(logoPlacement, logo, logo.size()); //LOGO
+            //painter.drawImage(logoPlacement, logo.scaled(QSize(), Qt::KeepAspectRatio, Qt::SmoothTransformation), QRectF(0.0, 0.0, logo.width(), logo.height())); //LOGO
             painter.drawText(textPlacement, person.name);
             painter.drawText(dayPlacement, QDate::currentDate().toString("d"));
             painter.drawText(monthPlacement, QDate::currentDate().toString("M"));
             painter.drawText(yearPlacement, QDate::currentDate().toString("yyyy"));
             painter.setFont(QFont("times", 12));
             painter.setPen(testiPen);
-            painter.drawText(PajaPlacement, department);
+            painter.drawText(departmentPlacement, department);
             painter.setFont(QFont("times", 14));
             painter.setPen(defaultPen);
             painter.translate(offset); //Move painter to the left by imageWidth
@@ -127,10 +128,10 @@ int MealTickets::paintImages(QPrinter &printer)
         }
         if(rowsOnPage <4 &&imagesOnRow < 3)
             painter.drawImage(target, image, imageSourceSize);
-            //painter.drawImage(logoPlacement, logo, logo.size()); //LOGO
+            //painter.drawImage(logoPlacement, logo, QRectF(0.0, 0.0f, logo.width(), logo.height())); //LOGO
             painter.setPen(testiPen);
             painter.setFont(QFont("Myriad Pro", 12));
-            painter.drawText(PajaPlacement, department);
+            painter.drawText(departmentPlacement, department);
             painter.setFont(QFont("times", 14));
             painter.setPen(defaultPen);
             painter.translate(offset);
