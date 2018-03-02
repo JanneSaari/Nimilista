@@ -12,13 +12,13 @@ AddDialog::AddDialog(NamelistWidget *parent)
     occupiedEveningWorkstations = parent->workstations->getOccupiedEveningWorkstations();
     occupiedMorningWorkstations = parent->workstations->getOccupiedMorningWorkstations();
 
-    nameLabel = new QLabel("Nimi");
-    informationLabel = new QLabel("Lisätietoa");
+    nameLabel = new QLabel(tr("Nimi"));
+    informationLabel = new QLabel(tr("Lisätietoa"));
 
     nameText = new QLineEdit;
     informationText = new QTextEdit;
 
-    workstationGroupBox = new QGroupBox("Työpisteet");
+    workstationGroupBox = new QGroupBox(tr("Työpisteet"));
     workstationButtonGroup = new QButtonGroup();
     QGridLayout *radioButtonLayout = new QGridLayout();
 
@@ -38,24 +38,24 @@ AddDialog::AddDialog(NamelistWidget *parent)
             column = 0;
         }
     }
-    workstationRadioButton = new QRadioButton("Ei työpistettä");
+    workstationRadioButton = new QRadioButton(tr("Ei työpistettä"));
     radioButtonLayout->addWidget(workstationRadioButton, rows, column, Qt::AlignLeft);
     workstationButtonGroup->addButton(workstationRadioButton);
     workstationButtonGroup->setId(workstationRadioButton, 0);
 
     workstationGroupBox->setLayout(radioButtonLayout);
 
-    morning = new QRadioButton("Aamu", this);
-    evening = new QRadioButton("Ilta", this);
+    morning = new QRadioButton(tr("Aamu"), this);
+    evening = new QRadioButton(tr("Ilta"), this);
 
-    monday = new QCheckBox("Ma", this);
-    tuesday = new QCheckBox("Ti", this);
-    wednesday = new QCheckBox("Ke", this);
-    thursday = new QCheckBox("To", this);
-    friday = new QCheckBox("Pe", this);
+    monday = new QCheckBox(tr("Ma"), this);
+    tuesday = new QCheckBox(tr("Ti"), this);
+    wednesday = new QCheckBox(tr("Ke"), this);
+    thursday = new QCheckBox(tr("To"), this);
+    friday = new QCheckBox(tr("Pe"), this);
 
-    okButton = new QPushButton("OK");
-    cancelButton = new QPushButton("Peruuta");
+    okButton = new QPushButton(tr("OK"));
+    cancelButton = new QPushButton(tr("Peruuta"));
 
     QGridLayout *gLayout = new QGridLayout;
     gLayout->setColumnStretch(2, 2);
@@ -102,15 +102,14 @@ AddDialog::AddDialog(NamelistWidget *parent)
 
 void AddDialog::updateWorkstationList()
 {
-    //TODO get name and display it
     if(evening->isChecked())
         for(int iii = 1; iii <= numberOfWorkstations; iii++) {
             OccupiedWorkstation testi(iii, " ");
             if(occupiedEveningWorkstations.contains(testi)) {
                 workstationButtonGroup->button(0)->setChecked(true);
                 workstationButtonGroup->button(iii)->setEnabled(false);
-                //Setting name to occupied workstations works, but it makes dialog box too big and editing doesn't work correctly.
-                workstationButtonGroup->button(iii)->setText(occupiedEveningWorkstations.at(occupiedEveningWorkstations.indexOf(testi)).name);
+                //Setting name to occupied workstations works, but it makes dialog box too big.
+                workstationButtonGroup->button(iii)->setText(QString::number(iii).append(" ") += occupiedEveningWorkstations.at(occupiedEveningWorkstations.indexOf(testi)).name);
             }
             else {
                 workstationButtonGroup->button(iii)->setEnabled(true);
@@ -123,7 +122,7 @@ void AddDialog::updateWorkstationList()
             if(occupiedMorningWorkstations.contains(testi)) {
                 workstationButtonGroup->button(0)->setChecked(true);
                 workstationButtonGroup->button(iii)->setEnabled(false);
-                workstationButtonGroup->button(iii)->setText(occupiedMorningWorkstations.at(occupiedMorningWorkstations.indexOf(testi)).name);
+                workstationButtonGroup->button(iii)->setText(QString::number(iii).append(" ") += occupiedMorningWorkstations.at(occupiedMorningWorkstations.indexOf(testi)).name);
             }
             else {
                 workstationButtonGroup->button(iii)->setEnabled(true);

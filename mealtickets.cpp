@@ -22,7 +22,7 @@ int MealTickets::printMealTickets()
     printer.setOrientation(QPrinter::Landscape);
     printer.setResolution(300);
     //TODO choose where to save pdf file
-    //QFileDialog opens the file selection popup adn returns QString
+    //QFileDialog opens the file selection popup and returns QString
     QFile pdfFile;
     //---------------------------------
     printer.setOutputFileName(QDir::currentPath().append("/aterialiput.pdf"));
@@ -46,7 +46,7 @@ int MealTickets::paintImages(QPrinter &printer)
     //Logon piirtäminen on kommentoitu pois ja merkitty kommentilla //LOGO
     //Logon piirtämisen PITÄISI toimia, kun kaikki //LOGO merkityt kohdat on otettu pois kommenteista.
     QImage image(QDir::currentPath().append("/lippu.png"));
-    //QImage logo(QDir::currentPath().append(/logo.png)); //LOGO
+    // QImage logo(QDir::currentPath().append("/logo.png")); //LOGO
 
 
     QPainter painter;
