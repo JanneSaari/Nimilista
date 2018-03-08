@@ -29,7 +29,6 @@ SOURCES += \
         mainwindow.cpp \
     tablemodel.cpp \
     namelistwidget.cpp \
-    newpersontab.cpp \
     adddialog.cpp \
     mealtickets.cpp \
     workstations.cpp \
@@ -39,7 +38,6 @@ HEADERS += \
         mainwindow.h \
     tablemodel.h \
     namelistwidget.h \
-    newpersontab.h \
     adddialog.h \
     mealtickets.h \
     person.h \
