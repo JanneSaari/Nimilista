@@ -104,6 +104,8 @@ void MainWindow::createMenus()
     });
 
     connect(printAct, &QAction::triggered, namelistWidget, &NamelistWidget::printMealTickets);
+    ITPajaAction->setChecked(true);
+    ITPajaAction->trigger();
 }
 
 void MainWindow::updateActions(const QItemSelection &selection)
