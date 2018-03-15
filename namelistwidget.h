@@ -22,12 +22,7 @@ public:
     void readFromFile(const QString &fileName);
     void writeToFile(const QString &fileName);
 
-    //Getters
-//    QVector<int> getFreeMorningWorkstations() const;
-//    QVector<int> getFreeEveningWorkstations() const;
-//    int getNumberOfWorkstations() const;
     QString getDepartment() const;
-    //Setters
     void setDepartment(QString newDepartment);
 
 public slots:

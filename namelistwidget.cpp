@@ -36,8 +36,6 @@ void NamelistWidget::showAddEntryDialog()
 
 void NamelistWidget::addEntry(Person person)
 {
-
-    //TODO check only if name matches
     if (!table->getPeople().contains(person)) {
         table->insertRows(0, 1, QModelIndex());
 
@@ -279,13 +277,11 @@ void NamelistWidget::printMealTickets()
     tickets.printMealTickets();
 }
 
-//Getters
 QString NamelistWidget::getDepartment() const
 {
     return parent->getDepartment();
 }
 
-//Setters
 void NamelistWidget::setDepartment(QString newDepartment)
 {
     department = newDepartment;
