@@ -37,10 +37,12 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
                 return person.workstation;
         }
         else if (index.column() == 2) {
-            if(person.isEvening)
-                return "Ilta";
-            else if(!person.isEvening)
+            if(person.shift == 0)
                 return "Aamu";
+            else if(person.shift == 1)
+                return "Päivä";
+            else if(person.shift == 2)
+                return "Ilta";
         }
         else if (index.column() == 3){
             if(person.isMonday)
@@ -80,7 +82,7 @@ QVariant TableModel::headerData(int section, Qt::Orientation orientation, int ro
             case 1:
                 return tr("Työpiste");
             case 2:
-                return tr("Aamu vai Ilta");
+                return tr("Vuoro");
             case 3:
                 return tr("Ma");
             case 4:
@@ -138,7 +140,7 @@ bool TableModel::setData(const QModelIndex &index, const QVariant &value, int ro
         else if(index.column() == 1)
             person.workstation = value.toInt();
         else if(index.column() == 2)
-            person.isEvening = value.toBool();
+            person.shift = value.toInt();
         else if(index.column() == 3)
             person.isMonday = value.toBool();
         else if(index.column() == 4)

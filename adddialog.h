@@ -32,7 +32,9 @@ public:
 
     QLineEdit *nameText;
     QTextEdit *informationText;
+    QButtonGroup *shift;
     QRadioButton *morning;
+    QRadioButton *day;
     QRadioButton *evening;
     QCheckBox *monday;
     QCheckBox *tuesday;
@@ -52,8 +54,9 @@ private:
     QPushButton *okButton;
     QPushButton *cancelButton;
 
-    QVector<OccupiedWorkstation> occupiedMorningWorkstations;
-    QVector<OccupiedWorkstation> occupiedEveningWorkstations;
+    QVector<ReservedWorkstation> ReservedMorningWorkstations;
+    QVector<ReservedWorkstation> ReservedDayWorkstations;
+    QVector<ReservedWorkstation> ReservedEveningWorkstations;
     int numberOfWorkstations;
 
 private slots:

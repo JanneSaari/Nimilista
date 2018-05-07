@@ -9,8 +9,9 @@ AddDialog::AddDialog(NamelistWidget *parent)
 
 {
     numberOfWorkstations = parent->workstations->getNumberOfWorkstations();
-    occupiedEveningWorkstations = parent->workstations->getOccupiedEveningWorkstations();
-    occupiedMorningWorkstations = parent->workstations->getOccupiedMorningWorkstations();
+    ReservedMorningWorkstations = parent->workstations->getReservedMorningWorkstations();
+    ReservedDayWorkstations     = parent->workstations->getReservedDayWorkstations();
+    ReservedEveningWorkstations = parent->workstations->getReservedEveningWorkstations();
 
     nameLabel = new QLabel(tr("Nimi"));
     informationLabel = new QLabel(tr("Lisätietoa"));
@@ -45,8 +46,13 @@ AddDialog::AddDialog(NamelistWidget *parent)
 
     workstationGroupBox->setLayout(radioButtonLayout);
 
+    shift = new QButtonGroup(this);
     morning = new QRadioButton(tr("Aamu"), this);
+    day = new QRadioButton(tr("Päivä"), this);
     evening = new QRadioButton(tr("Ilta"), this);
+    shift->addButton(morning);
+    shift->addButton(day);
+    shift->addButton(evening);
 
     monday = new QCheckBox(tr("Ma"), this);
     tuesday = new QCheckBox(tr("Ti"), this);
@@ -62,9 +68,10 @@ AddDialog::AddDialog(NamelistWidget *parent)
     gLayout->addWidget(nameLabel, 0, 0);
     gLayout->addWidget(nameText, 0, 1);
 
-    QVBoxLayout *morningOrEveningLayout = new QVBoxLayout;
-    morningOrEveningLayout->addWidget(morning);
-    morningOrEveningLayout->addWidget(evening);
+    QVBoxLayout *shiftLayout = new QVBoxLayout;
+    shiftLayout->addWidget(morning);
+    shiftLayout->addWidget(day);
+    shiftLayout->addWidget(evening);
 
     QHBoxLayout *daysLayout = new QHBoxLayout;
     daysLayout->addWidget(monday);
@@ -73,7 +80,7 @@ AddDialog::AddDialog(NamelistWidget *parent)
     daysLayout->addWidget(thursday);
     daysLayout->addWidget(friday);
 
-    gLayout->addLayout(morningOrEveningLayout, 1, 0, Qt::AlignLeft);
+    gLayout->addLayout(shiftLayout, 1, 0, Qt::AlignLeft);
     gLayout->addLayout(daysLayout, 1, 1, Qt::AlignLeft);
 
     gLayout->addWidget(workstationGroupBox, 1, 2, Qt::AlignRight);
@@ -94,7 +101,9 @@ AddDialog::AddDialog(NamelistWidget *parent)
     connect(okButton, &QAbstractButton::clicked, this, &QDialog::accept);
     connect(cancelButton, &QAbstractButton::clicked, this, &QDialog::reject);
 
-    connect(morning, &QRadioButton::toggled, this, &AddDialog::updateWorkstationList);
+    connect(morning, QRadioButton::toggled, this, &AddDialog::updateWorkstationList);
+    connect(day, QRadioButton::toggled, this, &AddDialog::updateWorkstationList);
+    connect(evening, QRadioButton::toggled, this, &AddDialog::updateWorkstationList);
     morning->setChecked(true);
 
     setWindowTitle(tr("Lisää Henkilö"));
@@ -102,27 +111,40 @@ AddDialog::AddDialog(NamelistWidget *parent)
 
 void AddDialog::updateWorkstationList()
 {
-    if(evening->isChecked())
+    if(morning->isChecked())
         for(int iii = 1; iii <= numberOfWorkstations; iii++) {
-            OccupiedWorkstation testi(iii, " ");
-            if(occupiedEveningWorkstations.contains(testi)) {
+            ReservedWorkstation testi(iii, " ");
+            if(ReservedMorningWorkstations.contains(testi)) {
                 workstationButtonGroup->button(0)->setChecked(true);
                 workstationButtonGroup->button(iii)->setEnabled(false);
-                //Setting name to occupied workstations works, but it makes dialog box too big.
-                workstationButtonGroup->button(iii)->setText(QString::number(iii).append(" ") += occupiedEveningWorkstations.at(occupiedEveningWorkstations.indexOf(testi)).name);
+                //Setting name to occupied workstations works, but it might make dialog box too big.
+                workstationButtonGroup->button(iii)->setText(QString::number(iii).append(" ") += ReservedMorningWorkstations.at(ReservedMorningWorkstations.indexOf(testi)).name);
             }
             else {
                 workstationButtonGroup->button(iii)->setEnabled(true);
                 workstationButtonGroup->button(iii)->setText(QString::number(iii));
             }
         }
-    if(morning->isChecked())
+    if(day->isChecked())
         for(int iii = 1; iii <= numberOfWorkstations; iii++) {
-            OccupiedWorkstation testi(iii, " ");
-            if(occupiedMorningWorkstations.contains(testi)) {
+            ReservedWorkstation testi(iii, " ");
+            if(ReservedDayWorkstations.contains(testi)) {
                 workstationButtonGroup->button(0)->setChecked(true);
                 workstationButtonGroup->button(iii)->setEnabled(false);
-                workstationButtonGroup->button(iii)->setText(QString::number(iii).append(" ") += occupiedMorningWorkstations.at(occupiedMorningWorkstations.indexOf(testi)).name);
+                workstationButtonGroup->button(iii)->setText(QString::number(iii).append(" ") += ReservedDayWorkstations.at(ReservedDayWorkstations.indexOf(testi)).name);
+            }
+            else {
+                workstationButtonGroup->button(iii)->setEnabled(true);
+                workstationButtonGroup->button(iii)->setText(QString::number(iii));
+            }
+        }
+    if(evening->isChecked())
+        for(int iii = 1; iii <= numberOfWorkstations; iii++) {
+            ReservedWorkstation testi(iii, " ");
+            if(ReservedEveningWorkstations.contains(testi)) {
+                workstationButtonGroup->button(0)->setChecked(true);
+                workstationButtonGroup->button(iii)->setEnabled(false);
+                workstationButtonGroup->button(iii)->setText(QString::number(iii).append(" ") += ReservedEveningWorkstations.at(ReservedEveningWorkstations.indexOf(testi)).name);
             }
             else {
                 workstationButtonGroup->button(iii)->setEnabled(true);

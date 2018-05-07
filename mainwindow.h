@@ -23,21 +23,20 @@ private slots:
 private:
     void createMenus();
 
-    QString department;
-
     NamelistWidget *namelistWidget;
     QMenu *fileMenu;
     QMenu *toolMenu;
+    QMenu *ticketMenu;
     QAction *openAct;
     QAction *saveAct;
     QAction *exitAct;
     QAction *editAct;
     QAction *removeAct;
     QAction *addAct;
-
-    QMenu *ticketMenu;
     QAction *printAct;
     QAction *openImageAct;
+
+    QString department;
 };
 
 #endif // MAINWINDOW_H

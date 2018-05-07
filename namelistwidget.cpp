@@ -19,7 +19,12 @@ void NamelistWidget::showAddEntryDialog()
     if (aDialog.exec()) {
         Person person;
         person.name = aDialog.nameText->text();
-        person.isEvening = aDialog.evening->isChecked();
+        if(aDialog.morning->isChecked())
+            person.shift = 0;
+        else if(aDialog.day->isChecked())
+            person.shift = 1;
+        else if(aDialog.evening->isChecked())
+            person.shift = 2;
 
         person.isMonday = aDialog.monday->isChecked();
         person.isTuesday = aDialog.tuesday->isChecked();
@@ -44,7 +49,7 @@ void NamelistWidget::addEntry(Person person)
         index = table->index(0, 1, QModelIndex());
         table->setData(index, QVariant(person.workstation), Qt::EditRole);
         index = table->index(0, 2, QModelIndex());
-        table->setData(index, QVariant(person.isEvening), Qt::EditRole);
+        table->setData(index, QVariant(person.shift), Qt::EditRole);
         index = table->index(0, 3, QModelIndex());
         table->setData(index, QVariant(person.isMonday), Qt::EditRole);
         index = table->index(0, 4, QModelIndex());
@@ -90,12 +95,14 @@ void NamelistWidget::editEntry()
             QVariant varWorkstation = table->data(workstationIndex, Qt::DisplayRole);
             person.workstation = varWorkstation.toUInt();
 
-            QModelIndex eveningIndex = table->index(row, 2, QModelIndex());
-            QVariant varEvening= table->data(eveningIndex, Qt::DisplayRole);
-            if(varEvening == "Aamu")
-                person.isEvening = false;
-            else if(varEvening == "Ilta")
-                person.isEvening = true;
+            QModelIndex shiftIndex = table->index(row, 2, QModelIndex());
+            QVariant varShift= table->data(shiftIndex, Qt::DisplayRole);
+            if(varShift == "Aamu")
+                person.shift = 0;
+            else if(varShift == "Päivä")
+                person.shift = 1;
+            else if(varShift == "Ilta")
+                person.shift = 2;
 
             QModelIndex mondayIndex = table->index(row, 3, QModelIndex());
             QVariant varMonday= table->data(mondayIndex, Qt::DisplayRole);
@@ -125,8 +132,12 @@ void NamelistWidget::editEntry()
         aDialog.nameText->setText(person.name);
         aDialog.informationText->setText(person.information);
         aDialog.workstationButtonGroup->button(person.workstation)->setChecked(true);
-        aDialog.morning->setChecked(!person.isEvening);
-        aDialog.evening->setChecked(person.isEvening);
+        if(person.shift == 0)
+            aDialog.morning->setChecked(true);
+        else if(person.shift == 1)
+            aDialog.day->setChecked(true);
+        else if(person.shift == 2)
+            aDialog.evening->setChecked(true);
         aDialog.monday->setChecked(person.isMonday);
         aDialog.tuesday->setChecked(person.isTuesday);
         aDialog.wednesday->setChecked(person.isWednesday);
@@ -147,10 +158,16 @@ void NamelistWidget::editEntry()
                 QModelIndex index = table->index(row, 1, QModelIndex());
                 table->setData(index, QVariant(newValues.workstation), Qt::EditRole);
             }
-            newValues.isEvening= aDialog.evening->isChecked();
-            if (newValues.isEvening!= person.isEvening) {
+
+            if(aDialog.morning->isChecked())
+                newValues.shift = 0;
+            else if(aDialog.day->isChecked())
+                newValues.shift = 1;
+            else if(aDialog.evening->isChecked())
+                newValues.shift = 2;
+            if (newValues.shift != person.shift) {
                 QModelIndex index = table->index(row, 2, QModelIndex());
-                table->setData(index, QVariant(newValues.isEvening), Qt::EditRole);
+                table->setData(index, QVariant(newValues.shift), Qt::EditRole);
             }
             newValues.isMonday= aDialog.monday->isChecked();
             if (newValues.isMonday!= person.isMonday) {
