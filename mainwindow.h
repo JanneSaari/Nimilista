@@ -4,6 +4,9 @@
 #include "namelistwidget.h"
 
 #include <QMainWindow>
+#include <QDockWidget>
+#include <QHBoxLayout>
+#include <QPushButton>
 
 class MainWindow : public QMainWindow
 {
@@ -22,11 +25,25 @@ private slots:
 
 private:
     void createMenus();
+    void createButtons();
 
     NamelistWidget *namelistWidget;
+
+    //Buttons
+    QDockWidget *bottomDockWidget;
+    QWidget *buttonWidget;
+    QHBoxLayout *buttonLayout;
+    QPushButton *addPersonButton;
+    QPushButton *editPersonButton;
+    QPushButton *removePersonButton;
+    QPushButton *makeTicketsButton;
+
+    //Menu
     QMenu *fileMenu;
     QMenu *toolMenu;
     QMenu *ticketMenu;
+
+    //Actions
     QAction *openAct;
     QAction *saveAct;
     QAction *exitAct;

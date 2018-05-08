@@ -117,7 +117,6 @@ void AddDialog::updateWorkstationList()
             if(ReservedMorningWorkstations.contains(testi)) {
                 workstationButtonGroup->button(0)->setChecked(true);
                 workstationButtonGroup->button(iii)->setEnabled(false);
-                //Setting name to occupied workstations works, but it might make dialog box too big.
                 workstationButtonGroup->button(iii)->setText(QString::number(iii).append(" ") += ReservedMorningWorkstations.at(ReservedMorningWorkstations.indexOf(testi)).name);
             }
             else {

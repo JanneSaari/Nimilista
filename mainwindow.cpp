@@ -12,6 +12,7 @@ MainWindow::MainWindow()
     namelistWidget = new NamelistWidget(this);
     setCentralWidget(namelistWidget);
     createMenus();
+    createButtons();
     setWindowTitle("Nimilista");
 }
 
@@ -54,10 +55,9 @@ void MainWindow::createMenus()
     connect(namelistWidget, &NamelistWidget::selectionChanged, this, &MainWindow::updateActions);
 
     ticketMenu = menuBar()->addMenu(tr("&Aterialiput"));
-    printAct = new QAction(tr("&Tee PDF"), this);
+    printAct = new QAction(tr("&Piirrä aterialiput"), this);
 
     ticketMenu->addAction(printAct);
-
 
     QActionGroup* departmentGroup = new QActionGroup(this);
     QMenu* testiMenu = ticketMenu->addMenu(tr("Pajan valinta"));
@@ -106,6 +106,35 @@ void MainWindow::createMenus()
     connect(printAct, &QAction::triggered, namelistWidget, &NamelistWidget::printMealTickets);
     ITPajaAction->setChecked(true);
     ITPajaAction->trigger();
+}
+
+void MainWindow::createButtons()
+{
+    bottomDockWidget = new QDockWidget(this, Qt::Widget);
+    bottomDockWidget->setAllowedAreas(Qt::BottomDockWidgetArea);
+    addDockWidget(Qt::BottomDockWidgetArea, bottomDockWidget);
+    bottomDockWidget->setFeatures(QDockWidget::NoDockWidgetFeatures);
+
+    buttonWidget = new QWidget(this);
+    buttonLayout = new QHBoxLayout(buttonWidget);
+    bottomDockWidget->setWidget(buttonWidget);
+    buttonWidget->setLayout(buttonLayout);
+
+    addPersonButton = new QPushButton(tr("Lisää"), this);
+    buttonLayout->addWidget(addPersonButton);
+    connect(addPersonButton, QPushButton::clicked, namelistWidget, &NamelistWidget::showAddEntryDialog);
+
+    editPersonButton = new QPushButton(tr("Muokkaa"), this);
+    buttonLayout->addWidget(editPersonButton);
+    connect(editPersonButton, QPushButton::clicked, namelistWidget, &NamelistWidget::editEntry);
+
+    removePersonButton = new QPushButton(tr("Poista"), this);
+    buttonLayout->addWidget(removePersonButton);
+    connect(removePersonButton, QPushButton::clicked, namelistWidget, &NamelistWidget::removeEntry);
+
+    makeTicketsButton = new QPushButton(tr("Piirrä aterialiput"), this);
+    buttonLayout->addWidget(makeTicketsButton);
+    connect(makeTicketsButton, QPushButton::clicked, namelistWidget, &NamelistWidget::printMealTickets);
 }
 
 void MainWindow::updateActions(const QItemSelection &selection)
