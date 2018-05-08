@@ -125,10 +125,12 @@ void MainWindow::createButtons()
     connect(addPersonButton, QPushButton::clicked, namelistWidget, &NamelistWidget::showAddEntryDialog);
 
     editPersonButton = new QPushButton(tr("Muokkaa"), this);
+    editPersonButton->setEnabled(false);
     buttonLayout->addWidget(editPersonButton);
     connect(editPersonButton, QPushButton::clicked, namelistWidget, &NamelistWidget::editEntry);
 
     removePersonButton = new QPushButton(tr("Poista"), this);
+    removePersonButton->setEnabled(false);
     buttonLayout->addWidget(removePersonButton);
     connect(removePersonButton, QPushButton::clicked, namelistWidget, &NamelistWidget::removeEntry);
 
@@ -144,9 +146,13 @@ void MainWindow::updateActions(const QItemSelection &selection)
     if(!indexes.isEmpty()){
         removeAct->setEnabled(true);
         editAct->setEnabled(true);
+        editPersonButton->setEnabled(true);
+        removePersonButton->setEnabled(true);
     } else {
         removeAct->setEnabled(false);
         editAct->setEnabled(false);
+        editPersonButton->setEnabled(false);
+        removePersonButton->setEnabled(false);
     }
 }
 

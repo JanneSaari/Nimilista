@@ -59,7 +59,7 @@ private:
     QVector<ReservedWorkstation> ReservedEveningWorkstations;
     int numberOfWorkstations;
 
-private slots:
+public slots:
     void updateWorkstationList();
 };
 

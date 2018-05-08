@@ -11,6 +11,12 @@ NamelistWidget::NamelistWidget(MainWindow *parent)
     table = new TableModel(this);
     workstations = new Workstations();
     setupNamelist();
+    readFromFile("testilista");
+}
+
+NamelistWidget::~NamelistWidget()
+{
+    writeToFile("testilista");
 }
 
 void NamelistWidget::showAddEntryDialog()
@@ -66,8 +72,8 @@ void NamelistWidget::addEntry(Person person)
         workstations->setWorkstation(person);
 
     } else if(!readingFromFile){
-        QMessageBox::information(this, tr("Duplicate Name"),
-            tr("The name \"%1\" already exists.").arg(person.name));
+        QMessageBox::information(this, tr("Toistuva nimi"),
+            tr("Henkilö \"%1\" on jo listalla.").arg(person.name));
     }
 }
 
@@ -143,6 +149,7 @@ void NamelistWidget::editEntry()
         aDialog.wednesday->setChecked(person.isWednesday);
         aDialog.thursday->setChecked(person.isThursday);
         aDialog.friday->setChecked(person.isFriday);
+        aDialog.updateWorkstationList();
 
         //Get edited values and compare them to previous ones
         //and set new values if they changed

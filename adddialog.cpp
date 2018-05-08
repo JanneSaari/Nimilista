@@ -101,10 +101,11 @@ AddDialog::AddDialog(NamelistWidget *parent)
     connect(okButton, &QAbstractButton::clicked, this, &QDialog::accept);
     connect(cancelButton, &QAbstractButton::clicked, this, &QDialog::reject);
 
-    connect(morning, QRadioButton::toggled, this, &AddDialog::updateWorkstationList);
-    connect(day, QRadioButton::toggled, this, &AddDialog::updateWorkstationList);
-    connect(evening, QRadioButton::toggled, this, &AddDialog::updateWorkstationList);
+    connect(morning, QRadioButton::clicked, this, &AddDialog::updateWorkstationList);
+    connect(day, QRadioButton::clicked, this, &AddDialog::updateWorkstationList);
+    connect(evening, QRadioButton::clicked, this, &AddDialog::updateWorkstationList);
     morning->setChecked(true);
+    updateWorkstationList();
 
     setWindowTitle(tr("Lisää Henkilö"));
 }
@@ -117,7 +118,9 @@ void AddDialog::updateWorkstationList()
             if(ReservedMorningWorkstations.contains(testi)) {
                 workstationButtonGroup->button(0)->setChecked(true);
                 workstationButtonGroup->button(iii)->setEnabled(false);
-                workstationButtonGroup->button(iii)->setText(QString::number(iii).append(" ") += ReservedMorningWorkstations.at(ReservedMorningWorkstations.indexOf(testi)).name);
+                workstationButtonGroup->button(iii)->setText(
+                            QString::number(iii).append(" ")
+                            += ReservedMorningWorkstations.at(ReservedMorningWorkstations.indexOf(testi)).name);
             }
             else {
                 workstationButtonGroup->button(iii)->setEnabled(true);
@@ -130,7 +133,9 @@ void AddDialog::updateWorkstationList()
             if(ReservedDayWorkstations.contains(testi)) {
                 workstationButtonGroup->button(0)->setChecked(true);
                 workstationButtonGroup->button(iii)->setEnabled(false);
-                workstationButtonGroup->button(iii)->setText(QString::number(iii).append(" ") += ReservedDayWorkstations.at(ReservedDayWorkstations.indexOf(testi)).name);
+                workstationButtonGroup->button(iii)->setText(
+                            QString::number(iii).append(" ")
+                            += ReservedDayWorkstations.at(ReservedDayWorkstations.indexOf(testi)).name);
             }
             else {
                 workstationButtonGroup->button(iii)->setEnabled(true);
@@ -143,7 +148,9 @@ void AddDialog::updateWorkstationList()
             if(ReservedEveningWorkstations.contains(testi)) {
                 workstationButtonGroup->button(0)->setChecked(true);
                 workstationButtonGroup->button(iii)->setEnabled(false);
-                workstationButtonGroup->button(iii)->setText(QString::number(iii).append(" ") += ReservedEveningWorkstations.at(ReservedEveningWorkstations.indexOf(testi)).name);
+                workstationButtonGroup->button(iii)->setText(
+                            QString::number(iii).append(" ")
+                            += ReservedEveningWorkstations.at(ReservedEveningWorkstations.indexOf(testi)).name);
             }
             else {
                 workstationButtonGroup->button(iii)->setEnabled(true);

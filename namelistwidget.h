@@ -17,6 +17,7 @@ class NamelistWidget : public QTabWidget
 
 public:
     NamelistWidget(MainWindow *parent = 0);
+    ~NamelistWidget();
     TableModel *table;
     Workstations *workstations;
     void readFromFile(const QString &fileName);
