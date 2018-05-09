@@ -45,6 +45,10 @@ public:
     QButtonGroup *workstationButtonGroup;
     QRadioButton *workstationRadioButton;
 
+    //Track workstation and shift of the edited person so that we can enable that button after updating workstation list.
+    int editedPersonWorkstation = 0;
+    int editedPersonShift = -1;
+
 private:
     NamelistWidget *parent;
     QLabel *nameLabel;

@@ -103,6 +103,8 @@ void NamelistWidget::editEntry()
 
             QModelIndex shiftIndex = table->index(row, 2, QModelIndex());
             QVariant varShift= table->data(shiftIndex, Qt::DisplayRole);
+
+            //TODO vuoro ja workstation ei päivity kunnolla
             if(varShift == "Aamu")
                 person.shift = 0;
             else if(varShift == "Päivä")
@@ -149,6 +151,9 @@ void NamelistWidget::editEntry()
         aDialog.wednesday->setChecked(person.isWednesday);
         aDialog.thursday->setChecked(person.isThursday);
         aDialog.friday->setChecked(person.isFriday);
+
+        aDialog.editedPersonWorkstation = person.workstation; //tracks persons workstation's number for enabling button for it after updating station list.
+        aDialog.editedPersonShift = person.shift;
         aDialog.updateWorkstationList();
 
         //Get edited values and compare them to previous ones
@@ -206,9 +211,9 @@ void NamelistWidget::editEntry()
                 QModelIndex index = table->index(row, 8, QModelIndex());
                 table->setData(index, newValues.information, Qt::EditRole);
             }
+            workstations->freeWorkstation(person);
+            workstations->setWorkstation(newValues);
         }
-        workstations->freeWorkstation(person);
-        workstations->setWorkstation(newValues);
     }
 }
 
@@ -240,6 +245,7 @@ void NamelistWidget::setupNamelist()
     tableView->verticalHeader()->hide();
     tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     tableView->setSelectionMode(QAbstractItemView::SingleSelection);
+    tableView->sortByColumn(0, Qt::AscendingOrder);
 
     tableView->setSortingEnabled(true);
 

@@ -1,6 +1,6 @@
 //Handles printing list of tickets to PDF file.
 //Adds names of the people who are attending that day
-//and date to pre-definet positions
+//and date to pre-definet positions.
 
 #ifndef MEALTICKETS_H
 #define MEALTICKETS_H

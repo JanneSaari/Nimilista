@@ -57,9 +57,9 @@ int MealTickets::paintImages(QPrinter &printer)
     //Green font color #19A146 (used to print department)
     //Grey font color #6F6F6E (not used at the moment)
     //font Myriad Pro
-    QColor testiColor("#19A146");
+    QColor departmentColor("#19A146");
     QPen defaultPen;
-    QPen testiPen(testiColor);
+    QPen departmentPen(departmentColor);
 
     QRectF pageSize = printer.pageRect();
     QPoint imagePlacement(0.0, 0.0);
@@ -112,7 +112,7 @@ int MealTickets::paintImages(QPrinter &printer)
             painter.drawText(monthPlacement, QDate::currentDate().toString("M"));
             painter.drawText(yearPlacement, QDate::currentDate().toString("yyyy"));
             painter.setFont(QFont("times", 12));
-            painter.setPen(testiPen);
+            painter.setPen(departmentPen);
             painter.drawText(departmentPlacement, department);
             painter.setFont(QFont("times", 14));
             painter.setPen(defaultPen);
@@ -129,7 +129,7 @@ int MealTickets::paintImages(QPrinter &printer)
         if(rowsOnPage <4 &&imagesOnRow < 3)
             painter.drawImage(target, image, imageSourceSize);
             //painter.drawImage(logoPlacement, logo, QRectF(0.0, 0.0f, logo.width(), logo.height())); //LOGO
-            painter.setPen(testiPen);
+            painter.setPen(departmentPen);
             painter.setFont(QFont("Myriad Pro", 12));
             painter.drawText(departmentPlacement, department);
             painter.setFont(QFont("times", 14));
