@@ -38,11 +38,11 @@ signals:
 
 private:
     void setupNamelist();
+
     QString department;
     MainWindow *parent;
 
-     //Used to prevent duplicate error while loading existing list from file.
-    bool readingFromFile = false;
+    bool readingFromFile = false; //Used to prevent duplicate error while loading existing list from file.
     bool firstTimeOpening = true; //Prevents error when opening program for the first time.
 
     QSortFilterProxyModel *proxyModel;

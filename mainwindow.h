@@ -14,6 +14,7 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow();
+    ~MainWindow();
 
     void setDepartment(QString newDepartment);
     QString getDepartment();
@@ -26,6 +27,8 @@ private slots:
 private:
     void createMenus();
     void createButtons();
+    void saveSettings();
+    void loadSettings();
 
     NamelistWidget *namelistWidget;
 

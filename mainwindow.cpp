@@ -14,6 +14,12 @@ MainWindow::MainWindow()
     createMenus();
     createButtons();
     setWindowTitle("Nimilista");
+    loadSettings();
+}
+
+MainWindow::~MainWindow()
+{
+    saveSettings();
 }
 
 void MainWindow::createMenus()
@@ -175,6 +181,30 @@ void MainWindow::saveFile()
 void MainWindow::setDepartment(QString newDepartment)
 {
     department = newDepartment;
+}
+
+void MainWindow::saveSettings()
+{
+    QFile settingsFile("settings");
+    if(!settingsFile.open(QIODevice::WriteOnly)) {
+        //ERROR here if needed
+        return;
+    }
+    QDataStream out(&settingsFile);
+    out << department;
+}
+
+void MainWindow::loadSettings()
+{
+    QFile settingsFile("settings");
+    if(!settingsFile.open(QIODevice::ReadOnly)) {
+        //ERROR
+        return;
+    }
+    QDataStream in(&settingsFile);
+    in >> department;
+    //TODO department is saved to settings file but menus(Pajavalinta checkbox) are not updated when restarting program
+    //Maybe make textfield to set department. This could popup first time program is started.
 }
 
 QString MainWindow::getDepartment()
