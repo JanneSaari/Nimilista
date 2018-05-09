@@ -43,6 +43,7 @@ private:
 
      //Used to prevent duplicate error while loading existing list from file.
     bool readingFromFile = false;
+    bool firstTimeOpening = true; //Prevents error when opening program for the first time.
 
     QSortFilterProxyModel *proxyModel;
 };

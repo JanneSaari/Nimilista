@@ -11,12 +11,13 @@ NamelistWidget::NamelistWidget(MainWindow *parent)
     table = new TableModel(this);
     workstations = new Workstations();
     setupNamelist();
-    readFromFile("testilista");
+    readFromFile("Nimilista");
+    firstTimeOpening = false;
 }
 
 NamelistWidget::~NamelistWidget()
 {
-    writeToFile("testilista");
+    writeToFile("Nimilista");
 }
 
 void NamelistWidget::showAddEntryDialog()
@@ -267,7 +268,7 @@ void NamelistWidget::readFromFile(const QString &fileName)
     QFile file(fileName);
     readingFromFile = true;
 
-    if (!file.open(QIODevice::ReadOnly)) {
+    if (!file.open(QIODevice::ReadOnly) && !firstTimeOpening) {
         QMessageBox::information(this, tr("Tiedostoa ei pystytty avaamaan."),
             file.errorString());
         return;
@@ -277,7 +278,7 @@ void NamelistWidget::readFromFile(const QString &fileName)
     QDataStream in(&file);
     in >> listOfPeople;
 
-    if (listOfPeople.isEmpty()) {
+    if (listOfPeople.isEmpty() && !firstTimeOpening) {
         QMessageBox::information(this, tr("Ei henkilöitä tiedostossa."),
                                  tr("Tiedosto jonka yritit avata ei sisällä henkilöitä."));
     } else {

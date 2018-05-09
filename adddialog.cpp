@@ -13,15 +13,61 @@ AddDialog::AddDialog(NamelistWidget *parent)
     ReservedDayWorkstations     = parent->workstations->getReservedDayWorkstations();
     ReservedEveningWorkstations = parent->workstations->getReservedEveningWorkstations();
 
+    QVBoxLayout *mainLayout = new QVBoxLayout(this);
+    //Top layout contains left adn right side layouts and bottom contains OK and cancel buttons
+    QHBoxLayout *topLayout = new QHBoxLayout(this);
+    //Left side of the dialog box contains name and info fields, and day and shift selections
+    QVBoxLayout *leftSideLayout = new QVBoxLayout(this);
+    //Name and info fields
+    QFormLayout *nameLayout = new QFormLayout(this);
     nameLabel = new QLabel(tr("Nimi"), this);
     nameText = new QLineEdit(this);
+    nameLayout->addRow(nameLabel, nameText);
+    QVBoxLayout *infoLayout = new QVBoxLayout(this);
     informationLabel = new QLabel(tr("Lisätietoa"), this);
     informationText = new QTextEdit(this);
+    infoLayout->addWidget(informationLabel);
+    infoLayout->addWidget(informationText);
 
+    //Shift radiobuttons
+    shift = new QButtonGroup(this);
+    morning = new QRadioButton(tr("Aamu"), this);
+    day = new QRadioButton(tr("Päivä"), this);
+    evening = new QRadioButton(tr("Ilta"), this);
+    shift->addButton(morning);
+    shift->addButton(day);
+    shift->addButton(evening);
+    QVBoxLayout *shiftLayout = new QVBoxLayout(this);
+    shiftLayout->addWidget(morning);
+    shiftLayout->addWidget(day);
+    shiftLayout->addWidget(evening);
+
+    //Days checkboxes
+    monday = new QCheckBox(tr("Ma"), this);
+    tuesday = new QCheckBox(tr("Ti"), this);
+    wednesday = new QCheckBox(tr("Ke"), this);
+    thursday = new QCheckBox(tr("To"), this);
+    friday = new QCheckBox(tr("Pe"), this);
+    QHBoxLayout *daysLayout = new QHBoxLayout(this);
+    daysLayout->addWidget(monday);
+    daysLayout->addWidget(tuesday);
+    daysLayout->addWidget(wednesday);
+    daysLayout->addWidget(thursday);
+    daysLayout->addWidget(friday);
+
+    QHBoxLayout *shiftAndDaysLayout = new QHBoxLayout(this);
+    shiftAndDaysLayout->addLayout(shiftLayout);
+    shiftAndDaysLayout->addLayout(daysLayout);
+
+    leftSideLayout->addLayout(nameLayout);
+    leftSideLayout->addLayout(shiftAndDaysLayout);
+    leftSideLayout->addLayout(infoLayout);
+
+    //Right side contains workstation selection radiobuttons
+    //Workstation radiobuttons
     workstationGroupBox = new QGroupBox(tr("Työpisteet"), this);
     workstationButtonGroup = new QButtonGroup(this);
     QGridLayout *radioButtonLayout = new QGridLayout(this);
-
     int rows = 0;
     int column = 0;
     for(int iii = 1; iii <= numberOfWorkstations; ++iii)
@@ -42,68 +88,24 @@ AddDialog::AddDialog(NamelistWidget *parent)
     radioButtonLayout->addWidget(workstationRadioButton, rows, column, Qt::AlignLeft);
     workstationButtonGroup->addButton(workstationRadioButton);
     workstationButtonGroup->setId(workstationRadioButton, 0);
-
     workstationGroupBox->setLayout(radioButtonLayout);
 
-    shift = new QButtonGroup(this);
-    morning = new QRadioButton(tr("Aamu"), this);
-    day = new QRadioButton(tr("Päivä"), this);
-    evening = new QRadioButton(tr("Ilta"), this);
-    shift->addButton(morning);
-    shift->addButton(day);
-    shift->addButton(evening);
+    topLayout->addLayout(leftSideLayout);
+    topLayout->addWidget(workstationGroupBox);
 
-    monday = new QCheckBox(tr("Ma"), this);
-    tuesday = new QCheckBox(tr("Ti"), this);
-    wednesday = new QCheckBox(tr("Ke"), this);
-    thursday = new QCheckBox(tr("To"), this);
-    friday = new QCheckBox(tr("Pe"), this);
-
+    //Bottom contains OK and cancel buttons
     okButton = new QPushButton(tr("OK"), this);
     cancelButton = new QPushButton(tr("Peruuta"), this);
+    QHBoxLayout *bottomLayout = new QHBoxLayout(this);
+    bottomLayout->addWidget(okButton);
+    bottomLayout->addWidget(cancelButton);
 
-    QGridLayout *gLayout = new QGridLayout(this);
-    gLayout->setColumnStretch(2, 2);
-    gLayout->addWidget(nameLabel, 0, 0);
-    gLayout->addWidget(nameText, 0, 1);
-
-    QVBoxLayout *shiftLayout = new QVBoxLayout(this);
-    shiftLayout->addWidget(morning);
-    shiftLayout->addWidget(day);
-    shiftLayout->addWidget(evening);
-
-    QHBoxLayout *daysLayout = new QHBoxLayout(this);
-    daysLayout->addWidget(monday);
-    daysLayout->addWidget(tuesday);
-    daysLayout->addWidget(wednesday);
-    daysLayout->addWidget(thursday);
-    daysLayout->addWidget(friday);
-
-//    QVBoxLayout leftSideLayout;
-//    leftSideLayout->addChildLayout(ShiftLayout);
-//    leftSideLayout->addChildLayout(daysLayout);
-
-    gLayout->addLayout(shiftLayout, 1, 0, Qt::AlignLeft);
-    gLayout->addLayout(daysLayout, 1, 1, Qt::AlignLeft);
-
-    gLayout->addWidget(workstationGroupBox, 1, 2, Qt::AlignRight);
-
-    gLayout->addWidget(informationLabel, 2, 0, Qt::AlignLeft|Qt::AlignTop);
-    gLayout->addWidget(informationText, 2, 1, Qt::AlignLeft);
-
-    QHBoxLayout *buttonLayout = new QHBoxLayout(this);
-    buttonLayout->addWidget(okButton);
-    buttonLayout->addWidget(cancelButton);
-
-    gLayout->addLayout(buttonLayout, 3, 1, Qt::AlignRight);
-
-    QVBoxLayout *mainLayout = new QVBoxLayout(this);
-    mainLayout->addLayout(gLayout);
+    mainLayout->addLayout(topLayout);
+    mainLayout->addLayout(bottomLayout);
     setLayout(mainLayout);
 
     connect(okButton, &QAbstractButton::clicked, this, &QDialog::accept);
     connect(cancelButton, &QAbstractButton::clicked, this, &QDialog::reject);
-
     connect(morning, QRadioButton::clicked, this, &AddDialog::updateWorkstationList);
     connect(day, QRadioButton::clicked, this, &AddDialog::updateWorkstationList);
     connect(evening, QRadioButton::clicked, this, &AddDialog::updateWorkstationList);
