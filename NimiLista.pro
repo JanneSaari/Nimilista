@@ -32,7 +32,8 @@ SOURCES += \
     adddialog.cpp \
     mealtickets.cpp \
     workstations.cpp \
-    person.cpp
+    person.cpp \
+    departmentdialog.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -41,7 +42,8 @@ HEADERS += \
     adddialog.h \
     mealtickets.h \
     person.h \
-    workstations.h
+    workstations.h \
+    departmentdialog.h
 
 FORMS += \
         mainwindow.ui

@@ -29,6 +29,7 @@ private:
     void createButtons();
     void saveSettings();
     void loadSettings();
+    void openDepartmentDialog();
 
     NamelistWidget *namelistWidget;
 

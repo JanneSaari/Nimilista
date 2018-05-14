@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include "departmentdialog.h"
+
 #include <QAction>
 #include <QFileDialog>
 #include <QMenuBar>
@@ -15,6 +17,8 @@ MainWindow::MainWindow()
     createButtons();
     setWindowTitle("Nimilista");
     loadSettings();
+    if(department == NULL)
+        openDepartmentDialog();
 }
 
 MainWindow::~MainWindow()
@@ -64,54 +68,57 @@ void MainWindow::createMenus()
     printAct = new QAction(tr("&Piirrä aterialiput"), this);
 
     ticketMenu->addAction(printAct);
-
-    QActionGroup* departmentGroup = new QActionGroup(this);
-    QMenu* testiMenu = ticketMenu->addMenu(tr("Pajan valinta"));
-    QAction* ITPajaAction = testiMenu->addAction(tr("IT-paja"));
-    QAction* MediaPajaAction = testiMenu->addAction(tr("Mediapaja"));
-    QAction* MetalliPajaAction = testiMenu->addAction(tr("Metalli- ja kiinteistönhuoltopaja"));
-    QAction* PuuPajaAction = testiMenu->addAction(tr("Puu- ja entisöintipaja"));
-    QAction* HoivaPajaAction = testiMenu->addAction(tr("Hoivapaja"));
-
-    ITPajaAction->setCheckable(true);
-    ITPajaAction->setActionGroup(departmentGroup);
-    MediaPajaAction->setCheckable(true);
-    MediaPajaAction->setActionGroup(departmentGroup);
-    MetalliPajaAction->setCheckable(true);
-    MetalliPajaAction->setActionGroup(departmentGroup);
-    PuuPajaAction->setCheckable(true);
-    PuuPajaAction->setActionGroup(departmentGroup);
-    HoivaPajaAction->setCheckable(true);
-    HoivaPajaAction->setActionGroup(departmentGroup);
-
-    //Have to use lambda function to bind function with arguments to action.
-    //There may be better way, but this works for now.
-    //Look for the way to bind namelistWidget->setDepartment()
-    //instead of passing the QString around
-    connect(ITPajaAction, &QAction::triggered, [this]()
-    {
-        setDepartment("IT-paja");
-    });
-    connect(MediaPajaAction, &QAction::triggered, [this]()
-    {
-        setDepartment("Mediapaja");
-    });
-    connect(MetalliPajaAction, &QAction::triggered, [this]()
-    {
-        setDepartment("Metalli- ja kiinteistönhuoltopaja");
-    });
-    connect(PuuPajaAction, &QAction::triggered, [this]()
-    {
-        setDepartment("Puu- ja entisöintipaja");
-    });
-    connect(HoivaPajaAction, &QAction::triggered, [this]()
-    {
-        setDepartment("Hoivapaja");
-    });
-
     connect(printAct, &QAction::triggered, namelistWidget, &NamelistWidget::printMealTickets);
-    ITPajaAction->setChecked(true);
-    ITPajaAction->trigger();
+
+    QAction* setDepartmentAction = ticketMenu->addAction(tr("Aseta paja"));
+    connect(setDepartmentAction, &QAction::triggered, this, &MainWindow::openDepartmentDialog);
+
+    //Old department selection choices.
+//    QActionGroup* departmentGroup = new QActionGroup(this);
+//    QMenu* departmentMenu = ticketMenu->addMenu(tr("Pajan valinta"));
+//    QAction* ITPajaAction = departmentMenu->addAction(tr("IT-paja"));
+//    QAction* MediaPajaAction = departmentMenu->addAction(tr("Mediapaja"));
+//    QAction* MetalliPajaAction = departmentMenu->addAction(tr("Metalli- ja kiinteistönhuoltopaja"));
+//    QAction* PuuPajaAction = departmentMenu->addAction(tr("Puu- ja entisöintipaja"));
+//    QAction* HoivaPajaAction = departmentMenu->addAction(tr("Hoivapaja"));
+
+//    ITPajaAction->setCheckable(true);
+//    ITPajaAction->setActionGroup(departmentGroup);
+//    MediaPajaAction->setCheckable(true);
+//    MediaPajaAction->setActionGroup(departmentGroup);
+//    MetalliPajaAction->setCheckable(true);
+//    MetalliPajaAction->setActionGroup(departmentGroup);
+//    PuuPajaAction->setCheckable(true);
+//    PuuPajaAction->setActionGroup(departmentGroup);
+//    HoivaPajaAction->setCheckable(true);
+//    HoivaPajaAction->setActionGroup(departmentGroup);
+
+//    //Have to use lambda function to bind function with arguments to action.
+//    //There may be better way, but this works for now.
+//    //Look for the way to bind namelistWidget->setDepartment()
+//    //instead of passing the QString around
+//    connect(ITPajaAction, &QAction::triggered, [this]()
+//    {
+//        setDepartment("IT-paja");
+//    });
+//    connect(MediaPajaAction, &QAction::triggered, [this]()
+//    {
+//        setDepartment("Mediapaja");
+//    });
+//    connect(MetalliPajaAction, &QAction::triggered, [this]()
+//    {
+//        setDepartment("Metalli- ja kiinteistönhuoltopaja");
+//    });
+//    connect(PuuPajaAction, &QAction::triggered, [this]()
+//    {
+//        setDepartment("Puu- ja entisöintipaja");
+//    });
+//    connect(HoivaPajaAction, &QAction::triggered, [this]()
+//    {
+//        setDepartment("Hoivapaja");
+//    });
+//    ITPajaAction->setChecked(true);
+//    ITPajaAction->trigger();
 }
 
 void MainWindow::createButtons()
@@ -178,10 +185,7 @@ void MainWindow::saveFile()
     }
 }
 
-void MainWindow::setDepartment(QString newDepartment)
-{
-    department = newDepartment;
-}
+
 
 void MainWindow::saveSettings()
 {
@@ -203,8 +207,20 @@ void MainWindow::loadSettings()
     }
     QDataStream in(&settingsFile);
     in >> department;
-    //TODO department is saved to settings file but menus(Pajavalinta checkbox) are not updated when restarting program
-    //Maybe make textfield to set department. This could popup first time program is started.
+}
+
+void MainWindow::openDepartmentDialog()
+{
+    DepartmentDialog departmentDialog(this);
+
+    if(departmentDialog.exec()) {
+        setDepartment(departmentDialog.departmentName->text());
+    }
+}
+
+void MainWindow::setDepartment(QString newDepartment)
+{
+    department = newDepartment;
 }
 
 QString MainWindow::getDepartment()

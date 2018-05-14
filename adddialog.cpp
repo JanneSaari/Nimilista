@@ -14,7 +14,7 @@ AddDialog::AddDialog(NamelistWidget *parent)
     ReservedEveningWorkstations = parent->workstations->getReservedEveningWorkstations();
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
-    //Top layout contains left adn right side layouts and bottom contains OK and cancel buttons
+    //Top layout contains left and right side layouts and bottom contains OK and cancel buttons
     QHBoxLayout *topLayout = new QHBoxLayout(this);
     //Left side of the dialog box contains name and info fields, and day and shift selections
     QVBoxLayout *leftSideLayout = new QVBoxLayout(this);
