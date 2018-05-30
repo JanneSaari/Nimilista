@@ -34,7 +34,8 @@ SOURCES += \
     workstations.cpp \
     person.cpp \
     departmentdialog.cpp \
-    ticketwidget.cpp
+    ticketwidget.cpp \
+    movablelabel.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -45,7 +46,8 @@ HEADERS += \
     person.h \
     workstations.h \
     departmentdialog.h \
-    ticketwidget.h
+    ticketwidget.h \
+    movablelabel.h
 
 FORMS += \
         mainwindow.ui

@@ -1,9 +1,11 @@
 #ifndef TICKETWIDGET_H
 #define TICKETWIDGET_H
 
+#include "movablelabel.h"
+
 #include <QWidget>
+#include <QVector>
 #include <QLabel>
-#include <QHBoxLayout>
 
 class TicketWidget : public QWidget
 {
@@ -12,7 +14,12 @@ public:
 
 private:
     QLabel *imageLabel;
-    QHBoxLayout *mainLayout;
+    MovableLabel *logoLabel;
+    MovableLabel *nameLabel;
+    MovableLabel *dateLabel;
+
+    //Not sure if needed yet
+    //QVector<MovableLabel> customLabels;
 };
 
 #endif // TICKETWIDGET_H

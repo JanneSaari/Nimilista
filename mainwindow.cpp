@@ -113,6 +113,7 @@ void MainWindow::createTabs()
     mainWidget->addTab(ticketWidget, tr("Aterialipput"));
     setCentralWidget(mainWidget);
     //setStyleSheet("QTabWidget::pane { border: 0; }");
+    mainWidget->setCurrentIndex(1);
 }
 
 void MainWindow::updateActions(const QItemSelection &selection)
