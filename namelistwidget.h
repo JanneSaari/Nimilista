@@ -4,6 +4,7 @@
 #include "tablemodel.h"
 #include "workstations.h"
 #include "person.h"
+#include "ticketwidget.h"
 
 #include <QItemSelection>
 #include <QTabWidget>
@@ -39,8 +40,9 @@ signals:
 private:
     void setupNamelist();
 
-    QString department;
     MainWindow *parent;
+    QString department;
+    TicketWidget *ticketWidget;
 
     bool readingFromFile = false; //Used to prevent duplicate error while loading existing list from file.
     bool firstTimeOpening = true; //Prevents error when opening program for the first time.

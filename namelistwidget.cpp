@@ -10,6 +10,7 @@ NamelistWidget::NamelistWidget(MainWindow *parent)
 {
     table = new TableModel(this);
     workstations = new Workstations();
+    ticketWidget = new TicketWidget();
     setupNamelist();
     readFromFile("Nimilista");
     firstTimeOpening = false;
@@ -18,6 +19,38 @@ NamelistWidget::NamelistWidget(MainWindow *parent)
 NamelistWidget::~NamelistWidget()
 {
     writeToFile("Nimilista");
+}
+
+void NamelistWidget::setupNamelist()
+{
+    proxyModel = new QSortFilterProxyModel(this);
+    proxyModel->setSourceModel(table);
+
+    QTableView *tableView = new QTableView;
+    tableView->setModel(proxyModel);
+
+    tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    tableView->horizontalHeader()->setStretchLastSection(true);
+    tableView->verticalHeader()->hide();
+    tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    tableView->setSelectionMode(QAbstractItemView::SingleSelection);
+    tableView->sortByColumn(0, Qt::AscendingOrder);
+
+    tableView->setSortingEnabled(true);
+
+    connect(tableView->selectionModel(),
+        &QItemSelectionModel::selectionChanged,
+        this, &NamelistWidget::selectionChanged);
+
+    connect(this, &QTabWidget::currentChanged, this, [this](int tabIndex) {
+        auto *tableView = qobject_cast<QTableView *>(widget(tabIndex));
+        if (tableView)
+            emit selectionChanged(tableView->selectionModel()->selection());
+    });
+
+    addTab(tableView, "Henkilöt");
+    addTab(ticketWidget, "lipputesti");
+    setCurrentIndex(1);
 }
 
 void NamelistWidget::showAddEntryDialog()
@@ -231,36 +264,6 @@ void NamelistWidget::removeEntry()
         workstations->freeWorkstation(table->getPeople().at(row));
         table->removeRows(row, 1, QModelIndex());
     }
-}
-
-void NamelistWidget::setupNamelist()
-{
-    proxyModel = new QSortFilterProxyModel(this);
-    proxyModel->setSourceModel(table);
-
-    QTableView *tableView = new QTableView;
-    tableView->setModel(proxyModel);
-
-    tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    tableView->horizontalHeader()->setStretchLastSection(true);
-    tableView->verticalHeader()->hide();
-    tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    tableView->setSelectionMode(QAbstractItemView::SingleSelection);
-    tableView->sortByColumn(0, Qt::AscendingOrder);
-
-    tableView->setSortingEnabled(true);
-
-    connect(tableView->selectionModel(),
-        &QItemSelectionModel::selectionChanged,
-        this, &NamelistWidget::selectionChanged);
-
-    connect(this, &QTabWidget::currentChanged, this, [this](int tabIndex) {
-        auto *tableView = qobject_cast<QTableView *>(widget(tabIndex));
-        if (tableView)
-            emit selectionChanged(tableView->selectionModel()->selection());
-    });
-
-    addTab(tableView, "Henkilöt");
 }
 
 void NamelistWidget::readFromFile(const QString &fileName)
