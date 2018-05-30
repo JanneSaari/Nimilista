@@ -4,15 +4,15 @@
 #include "tablemodel.h"
 #include "workstations.h"
 #include "person.h"
-#include "ticketwidget.h"
 
 #include <QItemSelection>
-#include <QTabWidget>
+#include <QWidget>
+#include <QtWidgets>
 
 class MainWindow;
 class QSortFilterProxyModel;
 
-class NamelistWidget : public QTabWidget
+class NamelistWidget : public QWidget
 {
     Q_OBJECT
 
@@ -42,7 +42,7 @@ private:
 
     MainWindow *parent;
     QString department;
-    TicketWidget *ticketWidget;
+    QTableView *tableView;
 
     bool readingFromFile = false; //Used to prevent duplicate error while loading existing list from file.
     bool firstTimeOpening = true; //Prevents error when opening program for the first time.

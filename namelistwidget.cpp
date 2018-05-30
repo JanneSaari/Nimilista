@@ -3,14 +3,13 @@
 #include "mealtickets.h"
 #include "mainwindow.h"
 
-#include <QtWidgets>
+#include <QGridLayout>
 
 NamelistWidget::NamelistWidget(MainWindow *parent)
     : parent(parent)
 {
     table = new TableModel(this);
     workstations = new Workstations();
-    ticketWidget = new TicketWidget();
     setupNamelist();
     readFromFile("Nimilista");
     firstTimeOpening = false;
@@ -23,10 +22,12 @@ NamelistWidget::~NamelistWidget()
 
 void NamelistWidget::setupNamelist()
 {
+    QGridLayout *mainLayout = new QGridLayout(this);
+
     proxyModel = new QSortFilterProxyModel(this);
     proxyModel->setSourceModel(table);
 
-    QTableView *tableView = new QTableView;
+    tableView = new QTableView(this);
     tableView->setModel(proxyModel);
 
     tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -42,15 +43,13 @@ void NamelistWidget::setupNamelist()
         &QItemSelectionModel::selectionChanged,
         this, &NamelistWidget::selectionChanged);
 
-    connect(this, &QTabWidget::currentChanged, this, [this](int tabIndex) {
-        auto *tableView = qobject_cast<QTableView *>(widget(tabIndex));
-        if (tableView)
-            emit selectionChanged(tableView->selectionModel()->selection());
-    });
+//    connect(this, &QTabWidget::currentChanged, this, [this](int tabIndex) {
+//        auto *tableView = qobject_cast<QTableView *>(widget(tabIndex));
+//        if (tableView)
+//            emit selectionChanged(tableView->selectionModel()->selection());
+//    });
 
-    addTab(tableView, "Henkilöt");
-    addTab(ticketWidget, "lipputesti");
-    setCurrentIndex(1);
+    mainLayout->addWidget(tableView);
 }
 
 void NamelistWidget::showAddEntryDialog()
@@ -115,7 +114,7 @@ void NamelistWidget::editEntry()
 {
     //TODO cleanup this function to smaller ones
     {
-        QTableView *temp = static_cast<QTableView*>(currentWidget());
+        QTableView *temp = static_cast<QTableView*>(tableView);
         QSortFilterProxyModel *proxy = static_cast<QSortFilterProxyModel*>(temp->model());
         QItemSelectionModel *selectionModel = temp->selectionModel();
         QModelIndexList indexes = selectionModel->selectedRows();
@@ -253,7 +252,7 @@ void NamelistWidget::editEntry()
 
 void NamelistWidget::removeEntry()
 {
-    QTableView *temp = static_cast<QTableView*>(currentWidget());
+    QTableView *temp = static_cast<QTableView*>(tableView);
     QSortFilterProxyModel *proxy = static_cast<QSortFilterProxyModel*>(temp->model());
     QItemSelectionModel *selectionModel = temp->selectionModel();
 

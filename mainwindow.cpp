@@ -11,8 +11,8 @@
 MainWindow::MainWindow()
 {
     resize(1200, 800);
-    namelistWidget = new NamelistWidget(this);
-    setCentralWidget(namelistWidget);
+    mainWidget = new QTabWidget(this);
+    createTabs();
     createMenus();
     createButtons();
     setWindowTitle("Nimilista");
@@ -103,6 +103,16 @@ void MainWindow::createButtons()
     makeTicketsButton = new QPushButton(tr("Piirrä aterialiput"), this);
     buttonLayout->addWidget(makeTicketsButton);
     connect(makeTicketsButton, QPushButton::clicked, namelistWidget, &NamelistWidget::printMealTickets);
+}
+
+void MainWindow::createTabs()
+{
+    namelistWidget = new NamelistWidget(this);
+    ticketWidget = new TicketWidget();
+    mainWidget->addTab(namelistWidget, tr("Nimilista"));
+    mainWidget->addTab(ticketWidget, tr("Aterialipput"));
+    setCentralWidget(mainWidget);
+    //setStyleSheet("QTabWidget::pane { border: 0; }");
 }
 
 void MainWindow::updateActions(const QItemSelection &selection)

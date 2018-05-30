@@ -2,8 +2,10 @@
 #define MAINWINDOW_H
 
 #include "namelistwidget.h"
+#include "ticketwidget.h"
 
 #include <QMainWindow>
+#include <QTabWidget>
 #include <QDockWidget>
 #include <QHBoxLayout>
 #include <QPushButton>
@@ -27,11 +29,14 @@ private slots:
 private:
     void createMenus();
     void createButtons();
+    void createTabs();
     void saveSettings();
     void loadSettings();
     void openDepartmentDialog();
 
+    QTabWidget *mainWidget;
     NamelistWidget *namelistWidget;
+    TicketWidget *ticketWidget;
 
     //Buttons
     QDockWidget *bottomDockWidget;
