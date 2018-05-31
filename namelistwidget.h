@@ -24,9 +24,6 @@ public:
     void readFromFile(const QString &fileName);
     void writeToFile(const QString &fileName);
 
-    QString getDepartment() const;
-    void setDepartment(QString newDepartment);
-
 public slots:
     void showAddEntryDialog();
     void addEntry(Person person);
@@ -40,7 +37,6 @@ private:
     void setupNamelist();
 
     MainWindow *parent;
-    QString department;
     QTableView *tableView;
 
     bool readingFromFile = false; //Used to prevent duplicate error while loading existing list from file.

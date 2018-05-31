@@ -28,8 +28,8 @@ private:
     QList<Person> listOfPeople;
     QString department;
 
-    int wantedRowsOnPage = 4;
     int wantedImagesOnRow = 3;
+    int wantedRowsOnPage = 4;
     QPointF textPlacement;
     QRectF logoPlacement;
 

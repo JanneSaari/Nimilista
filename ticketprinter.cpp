@@ -10,7 +10,7 @@ TicketPrinter::TicketPrinter()
 TicketPrinter::TicketPrinter(TicketWidget *parent)
     :parent(parent)
 {
-    //listOfPeople
+    listOfPeople = parent->parent->getPeople();
     department = parent->getDepartment();
 }
 
@@ -59,15 +59,14 @@ int TicketPrinter::paintImages(QPrinter &printer)
 
     //Page and image settings
     QRectF pageSize = printer.pageRect();
-    QPoint imagePlacement(0.0, 0.0);
     QSizeF imageSizeOnPage(pageSize.width() / wantedImagesOnRow, pageSize.height() / wantedRowsOnPage);
     QRectF imageSourceSize(0.0, 0.0, image.width(), image.height());
     QPoint offset(imageSizeOnPage.width(), 0.0);
-    QRectF target(imagePlacement, imageSizeOnPage);
 
     //Text placement relative to image
     //All placements are relative to the image.
     //The position of the image is changed by moving offset.
+    QRectF imagePlacement(QPointF(0.0, 0.0), imageSizeOnPage);
     textPlacement = QPointF(imageSizeOnPage.width() / 4, imageSizeOnPage.height() / 1.65);
     QPointF dayPlacement(imageSizeOnPage.width() / 3.1, imageSizeOnPage.height() / 1.38);
     QPointF monthPlacement(imageSizeOnPage.width() / 2.3, imageSizeOnPage.height() / 1.38);
@@ -102,7 +101,7 @@ int TicketPrinter::paintImages(QPrinter &printer)
                     rowsOnPage = 0;
                     painter.resetTransform();
             }
-            painter.drawImage(target, image, imageSourceSize);
+            painter.drawImage(imagePlacement, image, imageSourceSize);
             //painter.drawImage(logoPlacement, logo.scaled(QSize(), Qt::KeepAspectRatio, Qt::SmoothTransformation), QRectF(0.0, 0.0, logo.width(), logo.height())); //LOGO
             painter.drawImage(logoPlacement, logo, QRectF(0.0, 0.0f, logo.width(), logo.height())); //LOGO
             painter.drawText(textPlacement, person.name);
@@ -126,7 +125,7 @@ int TicketPrinter::paintImages(QPrinter &printer)
             rowsOnPage++;
         }
         if(rowsOnPage < wantedRowsOnPage && imagesOnRow < wantedImagesOnRow)
-            painter.drawImage(target, image, imageSourceSize);
+            painter.drawImage(imagePlacement, image, imageSourceSize);
             painter.drawImage(logoPlacement, logo, QRectF(0.0, 0.0f, logo.width(), logo.height())); //LOGO
             painter.setPen(departmentPen);
             painter.setFont(QFont("Myriad Pro", 12));

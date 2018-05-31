@@ -189,3 +189,8 @@ QString MainWindow::getDepartment()
 {
     return department;
 }
+
+QList<Person> MainWindow::getPeople()
+{
+    return namelistWidget->table->getPeople();
+}

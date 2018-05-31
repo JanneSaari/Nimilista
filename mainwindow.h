@@ -3,6 +3,7 @@
 
 #include "namelistwidget.h"
 #include "ticketwidget.h"
+#include "person.h"
 
 #include <QMainWindow>
 #include <QTabWidget>
@@ -21,6 +22,7 @@ public:
     ~MainWindow();
 
     void setDepartment(QString newDepartment);
+    QList<Person> getPeople();
     QString getDepartment();
 
 private slots:

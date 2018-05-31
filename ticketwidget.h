@@ -3,6 +3,7 @@
 
 #include "movablelabel.h"
 #include "mainwindow.h"
+#include "person.h"
 
 #include <QWidget>
 #include <QVector>
@@ -17,9 +18,9 @@ public:
     void setDepartment(QString newDepartment);
     QString getDepartment() const;
 
-private:
     MainWindow *parent;
 
+private:
     QLabel *imageLabel;
     MovableLabel *logoLabel;
     MovableLabel *nameLabel;

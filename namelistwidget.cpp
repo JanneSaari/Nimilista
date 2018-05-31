@@ -303,14 +303,3 @@ void NamelistWidget::writeToFile(const QString &fileName)
     QDataStream out(&file);
     out << table->getPeople();
 }
-
-QString NamelistWidget::getDepartment() const
-{
-    return parent->getDepartment();
-}
-
-void NamelistWidget::setDepartment(QString newDepartment)
-{
-    department = newDepartment;
-}
-
