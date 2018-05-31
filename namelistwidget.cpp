@@ -1,6 +1,6 @@
 #include "namelistwidget.h"
 #include "adddialog.h"
-#include "mealtickets.h"
+#include "ticketprinter.h"
 #include "mainwindow.h"
 
 #include <QGridLayout>
@@ -302,12 +302,6 @@ void NamelistWidget::writeToFile(const QString &fileName)
 
     QDataStream out(&file);
     out << table->getPeople();
-}
-
-void NamelistWidget::printMealTickets()
-{
-    MealTickets tickets(this);
-    tickets.printMealTickets();
 }
 
 QString NamelistWidget::getDepartment() const

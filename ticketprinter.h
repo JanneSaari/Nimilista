@@ -9,21 +9,29 @@
 #include <QPrinter>
 
 #include <person.h>
-#include "namelistwidget.h"
+#include "ticketwidget.h"
 
-class MealTickets
+class TicketPrinter
 {
 public:
-    MealTickets();
-    MealTickets(NamelistWidget *parent = 0);
+    TicketPrinter();
+    TicketPrinter(TicketWidget *parent = 0);
     int printMealTickets();
 
+    //set placement testi
+    void setTestPlacement(QRectF placement);
+
 private:
-    NamelistWidget *parent;
+    TicketWidget *parent;
     QPrinter *printer;
     QPainter *painter;
     QList<Person> listOfPeople;
     QString department;
+
+    int wantedRowsOnPage = 4;
+    int wantedImagesOnRow = 3;
+    QPointF textPlacement;
+    QRectF logoPlacement;
 
     int paintImages(QPrinter &printer);
     int getDayOfTheWeek();

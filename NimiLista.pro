@@ -30,24 +30,24 @@ SOURCES += \
     tablemodel.cpp \
     namelistwidget.cpp \
     adddialog.cpp \
-    mealtickets.cpp \
     workstations.cpp \
     person.cpp \
     departmentdialog.cpp \
     ticketwidget.cpp \
-    movablelabel.cpp
+    movablelabel.cpp \
+    ticketprinter.cpp
 
 HEADERS += \
         mainwindow.h \
     tablemodel.h \
     namelistwidget.h \
     adddialog.h \
-    mealtickets.h \
     person.h \
     workstations.h \
     departmentdialog.h \
     ticketwidget.h \
-    movablelabel.h
+    movablelabel.h \
+    ticketprinter.h
 
 FORMS += \
         mainwindow.ui

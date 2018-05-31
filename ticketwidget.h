@@ -2,6 +2,7 @@
 #define TICKETWIDGET_H
 
 #include "movablelabel.h"
+#include "mainwindow.h"
 
 #include <QWidget>
 #include <QVector>
@@ -10,9 +11,15 @@
 class TicketWidget : public QWidget
 {
 public:
-    TicketWidget();
+    TicketWidget(MainWindow *parent = Q_NULLPTR);
+
+    void printMealTickets();
+    void setDepartment(QString newDepartment);
+    QString getDepartment() const;
 
 private:
+    MainWindow *parent;
+
     QLabel *imageLabel;
     MovableLabel *logoLabel;
     MovableLabel *nameLabel;

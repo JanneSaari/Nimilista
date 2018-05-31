@@ -68,7 +68,7 @@ void MainWindow::createMenus()
     printAct = new QAction(tr("&Piirrä aterialiput"), this);
 
     ticketMenu->addAction(printAct);
-    connect(printAct, &QAction::triggered, namelistWidget, &NamelistWidget::printMealTickets);
+    //connect(printAct, &QAction::triggered, namelistWidget, &NamelistWidget::printMealTickets);
 
     QAction* setDepartmentAction = ticketMenu->addAction(tr("Aseta paja"));
     connect(setDepartmentAction, &QAction::triggered, this, &MainWindow::openDepartmentDialog);
@@ -100,15 +100,15 @@ void MainWindow::createButtons()
     buttonLayout->addWidget(removePersonButton);
     connect(removePersonButton, QPushButton::clicked, namelistWidget, &NamelistWidget::removeEntry);
 
-    makeTicketsButton = new QPushButton(tr("Piirrä aterialiput"), this);
-    buttonLayout->addWidget(makeTicketsButton);
-    connect(makeTicketsButton, QPushButton::clicked, namelistWidget, &NamelistWidget::printMealTickets);
+    drawTicketsButton = new QPushButton(tr("Piirrä aterialiput"), this);
+    buttonLayout->addWidget(drawTicketsButton);
+    connect(drawTicketsButton, QPushButton::clicked, ticketWidget, &TicketWidget::printMealTickets);
 }
 
 void MainWindow::createTabs()
 {
     namelistWidget = new NamelistWidget(this);
-    ticketWidget = new TicketWidget();
+    ticketWidget = new TicketWidget(this);
     mainWidget->addTab(namelistWidget, tr("Nimilista"));
     mainWidget->addTab(ticketWidget, tr("Aterialipput"));
     setCentralWidget(mainWidget);

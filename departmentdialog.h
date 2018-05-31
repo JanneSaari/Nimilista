@@ -8,6 +8,8 @@
 #include <QPushButton>
 #include <QLabel>
 
+//Simple dialog window for setting department.
+//Shows currently set department or empty text field if it isn't set.
 class DepartmentDialog : public QDialog
 {
 public:

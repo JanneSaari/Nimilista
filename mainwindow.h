@@ -10,6 +10,8 @@
 #include <QHBoxLayout>
 #include <QPushButton>
 
+class TicketWidget;
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -45,7 +47,7 @@ private:
     QPushButton *addPersonButton;
     QPushButton *editPersonButton;
     QPushButton *removePersonButton;
-    QPushButton *makeTicketsButton;
+    QPushButton *drawTicketsButton;
 
     //Menu
     QMenu *fileMenu;

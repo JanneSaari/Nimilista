@@ -1,21 +1,20 @@
-#include "mealtickets.h"
-#include "namelistwidget.h"
+#include "ticketprinter.h"
 
 #include <QDir>
 #include <QDate>
 
-MealTickets::MealTickets()
+TicketPrinter::TicketPrinter()
 {
 }
 
-MealTickets::MealTickets(NamelistWidget *parent)
+TicketPrinter::TicketPrinter(TicketWidget *parent)
     :parent(parent)
 {
-    listOfPeople = parent->table->getPeople();
+    //listOfPeople
     department = parent->getDepartment();
 }
 
-int MealTickets::printMealTickets()
+int TicketPrinter::printMealTickets()
 {
     QPrinter printer;
     printer.setOutputFormat(QPrinter::PdfFormat);
@@ -33,20 +32,15 @@ int MealTickets::printMealTickets()
     return 0;
 }
 
-int MealTickets::paintImages(QPrinter &printer)
+int TicketPrinter::paintImages(QPrinter &printer)
 {
     //TODO cleanup this function. Take "fill rest of the page"-part
     //from the end and make own function for it.
     //Use it to print full page of empty tickets and fill info if needed.
     //ATM this function prints images for each person in listOfPeople,
     //who are attending today. And after that, fills rest of the page with empty images.
-
-    //Logo printing is commented out and indicated by //LOGO comment
-
-    //Logon piirtäminen on kommentoitu pois ja merkitty kommentilla //LOGO
-    //Logon piirtämisen PITÄISI toimia, kun kaikki //LOGO merkityt kohdat on otettu pois kommenteista.
-    QImage image(QDir::currentPath().append("/lippu.png"));
-    //QImage logo(QDir::currentPath().append("/logo.png")); //LOGO
+    QImage image(QDir::currentPath().append("/lippu_ei_logoa.png"));
+    QImage logo(QDir::currentPath().append("/logo.png")); //LOGO
 
     QPainter painter;
     if(!painter.begin(&printer)) {
@@ -54,34 +48,37 @@ int MealTickets::paintImages(QPrinter &printer)
         return 1;
     }
 
+    //Pen and font settings
     //Green font color #19A146 (used to print department)
     //Grey font color #6F6F6E (not used at the moment)
     //font Myriad Pro
     QColor departmentColor("#19A146");
     QPen defaultPen;
     QPen departmentPen(departmentColor);
+    painter.setFont(QFont("times", 14));
 
+    //Page and image settings
     QRectF pageSize = printer.pageRect();
     QPoint imagePlacement(0.0, 0.0);
-    QSizeF imageSizeOnPage(pageSize.width() / 3, pageSize.height() / 4);
+    QSizeF imageSizeOnPage(pageSize.width() / wantedImagesOnRow, pageSize.height() / wantedRowsOnPage);
     QRectF imageSourceSize(0.0, 0.0, image.width(), image.height());
     QPoint offset(imageSizeOnPage.width(), 0.0);
     QRectF target(imagePlacement, imageSizeOnPage);
-    painter.setFont(QFont("times", 14));
 
     //Text placement relative to image
-    QPointF textPlacement(imageSizeOnPage.width() / 4, imageSizeOnPage.height() / 1.65);
+    //All placements are relative to the image.
+    //The position of the image is changed by moving offset.
+    textPlacement = QPointF(imageSizeOnPage.width() / 4, imageSizeOnPage.height() / 1.65);
     QPointF dayPlacement(imageSizeOnPage.width() / 3.1, imageSizeOnPage.height() / 1.38);
     QPointF monthPlacement(imageSizeOnPage.width() / 2.3, imageSizeOnPage.height() / 1.38);
     QPointF yearPlacement(imageSizeOnPage.width() / 1.75, imageSizeOnPage.height() / 1.38);
     QPointF departmentPlacement(imageSizeOnPage.width() / 7.6, imageSizeOnPage.height() / 2.30);
-    //logoPlacement is position of the logo (upper left corner, lower right corner)
-    //Vaihda sopivaan kohtaan suhteessa lippuun.
-    //Argumentit logoPlacementissa ovat (vasen ylänurkka, oikea alanurkka)
-    //QRectF logoPlacement(QPointF(150.0, 20.0), ); //LOGO
+    //QRectF logoPlacement(QPointF(150.0, 20.0), QPointF(600.0, 200.0)); //LOGO
 
     int dayOfWeek = getDayOfTheWeek();
-
+    QString day = QDate::currentDate().toString("d");
+    QString month = QDate::currentDate().toString("M");
+    QString year = QDate::currentDate().toString("yyyy");
     int imagesOnRow = 0;
     int rowsOnPage = 0;
     QString department = parent->getDepartment();
@@ -91,13 +88,13 @@ int MealTickets::paintImages(QPrinter &printer)
     foreach(const Person &person, listOfPeople){
         if (isAttendingToday(dayOfWeek, person)) {
             //Translate painter to the new row if current one is full
-            if(imagesOnRow >= 3){
+            if(imagesOnRow >= wantedImagesOnRow){
                 painter.translate(-imagesOnRow * imageSizeOnPage.width(), imageSizeOnPage.height());
                 imagesOnRow = 0;
                 rowsOnPage++;
             }
             //Translate painter to the new page if current one is full
-            if(rowsOnPage >= 4) {
+            if(rowsOnPage >= wantedRowsOnPage) {
                     if(! printer.newPage()) {
                         qWarning("Uuden sivun tekeminen ei onnistunut.");
                         return 1;
@@ -107,10 +104,11 @@ int MealTickets::paintImages(QPrinter &printer)
             }
             painter.drawImage(target, image, imageSourceSize);
             //painter.drawImage(logoPlacement, logo.scaled(QSize(), Qt::KeepAspectRatio, Qt::SmoothTransformation), QRectF(0.0, 0.0, logo.width(), logo.height())); //LOGO
+            painter.drawImage(logoPlacement, logo, QRectF(0.0, 0.0f, logo.width(), logo.height())); //LOGO
             painter.drawText(textPlacement, person.name);
-            painter.drawText(dayPlacement, QDate::currentDate().toString("d"));
-            painter.drawText(monthPlacement, QDate::currentDate().toString("M"));
-            painter.drawText(yearPlacement, QDate::currentDate().toString("yyyy"));
+            painter.drawText(dayPlacement, day);
+            painter.drawText(monthPlacement, month);
+            painter.drawText(yearPlacement, year);
             painter.setFont(QFont("times", 12));
             painter.setPen(departmentPen);
             painter.drawText(departmentPlacement, department);
@@ -120,15 +118,16 @@ int MealTickets::paintImages(QPrinter &printer)
             imagesOnRow++;
         }
     }
-    while (rowsOnPage < 4) {
-        if(imagesOnRow >= 3){
+    //Fill rest of the page with tickets without name and date
+    while (rowsOnPage < wantedRowsOnPage) {
+        if(imagesOnRow >= wantedImagesOnRow){
             painter.translate(-imagesOnRow * imageSizeOnPage.width(), imageSizeOnPage.height());
             imagesOnRow = 0;
             rowsOnPage++;
         }
-        if(rowsOnPage <4 &&imagesOnRow < 3)
+        if(rowsOnPage < wantedRowsOnPage && imagesOnRow < wantedImagesOnRow)
             painter.drawImage(target, image, imageSourceSize);
-            //painter.drawImage(logoPlacement, logo, QRectF(0.0, 0.0f, logo.width(), logo.height())); //LOGO
+            painter.drawImage(logoPlacement, logo, QRectF(0.0, 0.0f, logo.width(), logo.height())); //LOGO
             painter.setPen(departmentPen);
             painter.setFont(QFont("Myriad Pro", 12));
             painter.drawText(departmentPlacement, department);
@@ -141,7 +140,7 @@ int MealTickets::paintImages(QPrinter &printer)
     return 0;
 }
 
-bool MealTickets::isAttendingToday(int DayOfWeek, Person person)
+bool TicketPrinter::isAttendingToday(int DayOfWeek, Person person)
 {
     switch (DayOfWeek) {
     case 1:
@@ -165,9 +164,14 @@ bool MealTickets::isAttendingToday(int DayOfWeek, Person person)
     }
 }
 
-int MealTickets::getDayOfTheWeek()
+int TicketPrinter::getDayOfTheWeek()
 {
     QDate date(QDate::currentDate());
 
     return date.dayOfWeek();
+}
+
+void TicketPrinter::setTestPlacement(QRectF placement)
+{
+    logoPlacement = placement;
 }

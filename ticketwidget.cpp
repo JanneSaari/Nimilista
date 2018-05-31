@@ -1,10 +1,12 @@
 #include "ticketwidget.h"
+#include "ticketprinter.h"
 
 #include <QDir>
 #include <QPixmap>
 #include <QDate>
 
-TicketWidget::TicketWidget()
+TicketWidget::TicketWidget(MainWindow *parent)
+    :parent(parent)
 {
     QPixmap ticketImage(QDir::currentPath().append("/lippu_ei_logoa.png"));
     imageLabel = new QLabel(this);
@@ -25,4 +27,21 @@ TicketWidget::TicketWidget()
     dateLabel->setGeometry(300, 300, 400, 400);
     dateLabel->setText(QDate::currentDate().toString("dd.MM.yyyy"));
     dateLabel->setFont(QFont("Ariel", 30));
+}
+
+void TicketWidget::printMealTickets()
+{
+    TicketPrinter testi(this);
+    testi.setTestPlacement(logoLabel->geometry());
+    testi.printMealTickets();
+}
+
+QString TicketWidget::getDepartment() const
+{
+    return parent->getDepartment();
+}
+
+void TicketWidget::setDepartment(QString department)
+{
+    parent->setDepartment(department);
 }

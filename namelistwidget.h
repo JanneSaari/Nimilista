@@ -32,7 +32,6 @@ public slots:
     void addEntry(Person person);
     void editEntry();
     void removeEntry();
-    void printMealTickets();
 
 signals:
     void selectionChanged(const QItemSelection &selected);
