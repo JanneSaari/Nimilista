@@ -8,6 +8,8 @@
 #include <QWidget>
 #include <QVector>
 #include <QLabel>
+#include <QPicture>
+#include <QPixmap>
 
 class TicketWidget : public QWidget
 {
@@ -21,7 +23,11 @@ public:
     MainWindow *parent;
 
 private:
+    QPicture ticket;
     QLabel *imageLabel;
+    QPixmap ticketImage;
+    QPixmap logoImage;
+
     MovableLabel *logoLabel;
     MovableLabel *nameLabel;
     MovableLabel *dateLabel;

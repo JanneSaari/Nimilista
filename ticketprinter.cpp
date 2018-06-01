@@ -3,12 +3,8 @@
 #include <QDir>
 #include <QDate>
 
-TicketPrinter::TicketPrinter()
-{
-}
-
-TicketPrinter::TicketPrinter(TicketWidget *parent)
-    :parent(parent)
+TicketPrinter::TicketPrinter(QPicture ticket, TicketWidget *parent)
+    :ticket(ticket), parent(parent)
 {
     listOfPeople = parent->parent->getPeople();
     department = parent->getDepartment();
@@ -33,14 +29,14 @@ int TicketPrinter::printMealTickets()
 }
 
 int TicketPrinter::paintImages(QPrinter &printer)
-{
+{   
     //TODO cleanup this function. Take "fill rest of the page"-part
     //from the end and make own function for it.
     //Use it to print full page of empty tickets and fill info if needed.
     //ATM this function prints images for each person in listOfPeople,
     //who are attending today. And after that, fills rest of the page with empty images.
     QImage image(QDir::currentPath().append("/lippu_ei_logoa.png"));
-    QImage logo(QDir::currentPath().append("/logo.png")); //LOGO
+    QImage logo(QDir::currentPath().append("/logo.png"));
 
     QPainter painter;
     if(!painter.begin(&printer)) {
@@ -72,7 +68,7 @@ int TicketPrinter::paintImages(QPrinter &printer)
     QPointF monthPlacement(imageSizeOnPage.width() / 2.3, imageSizeOnPage.height() / 1.38);
     QPointF yearPlacement(imageSizeOnPage.width() / 1.75, imageSizeOnPage.height() / 1.38);
     QPointF departmentPlacement(imageSizeOnPage.width() / 7.6, imageSizeOnPage.height() / 2.30);
-    //QRectF logoPlacement(QPointF(150.0, 20.0), QPointF(600.0, 200.0)); //LOGO
+    //QRectF logoPlacement(QPointF(150.0, 20.0), QPointF(600.0, 200.0));
 
     int dayOfWeek = getDayOfTheWeek();
     QString day = QDate::currentDate().toString("d");
@@ -82,8 +78,12 @@ int TicketPrinter::paintImages(QPrinter &printer)
     int rowsOnPage = 0;
     QString department = parent->getDepartment();
 
+
+    //TODO change this to QPicture. No need to repeat steps everytime. Try to get QPicture from ticket tab, then just add name and date if needed.
+
     //Print images in 3*4 grid by translating painter by offset(image width on page, 0)
     //After row is full, translate to start of the next row or next page, if the page is full
+    painter.scale(qreal(imageSizeOnPage.width() / ticket.width()), qreal(imageSizeOnPage.height() / ticket.height()));
     foreach(const Person &person, listOfPeople){
         if (isAttendingToday(dayOfWeek, person)) {
             //Translate painter to the new row if current one is full
@@ -101,40 +101,40 @@ int TicketPrinter::paintImages(QPrinter &printer)
                     rowsOnPage = 0;
                     painter.resetTransform();
             }
-            painter.drawImage(imagePlacement, image, imageSourceSize);
-            //painter.drawImage(logoPlacement, logo.scaled(QSize(), Qt::KeepAspectRatio, Qt::SmoothTransformation), QRectF(0.0, 0.0, logo.width(), logo.height())); //LOGO
-            painter.drawImage(logoPlacement, logo, QRectF(0.0, 0.0f, logo.width(), logo.height())); //LOGO
-            painter.drawText(textPlacement, person.name);
-            painter.drawText(dayPlacement, day);
-            painter.drawText(monthPlacement, month);
-            painter.drawText(yearPlacement, year);
-            painter.setFont(QFont("times", 12));
-            painter.setPen(departmentPen);
-            painter.drawText(departmentPlacement, department);
-            painter.setFont(QFont("times", 14));
-            painter.setPen(defaultPen);
-            painter.translate(offset); //Move painter to the left by imageWidth
+            painter.drawPicture(0, 0, ticket);
+//            painter.drawImage(imagePlacement, image, imageSourceSize);
+//            painter.drawImage(logoPlacement, logo, QRectF(0.0, 0.0f, logo.width(), logo.height()));
+//            painter.drawText(textPlacement, person.name);
+//            painter.drawText(dayPlacement, day);
+//            painter.drawText(monthPlacement, month);
+//            painter.drawText(yearPlacement, year);
+//            painter.setFont(QFont("times", 12));
+//            painter.setPen(departmentPen);
+//            painter.drawText(departmentPlacement, department);
+//            painter.setFont(QFont("times", 14));
+//            painter.setPen(defaultPen);
+            painter.translate(offset); //Move painter to the right by width of one ticket on page
             imagesOnRow++;
         }
     }
     //Fill rest of the page with tickets without name and date
-    while (rowsOnPage < wantedRowsOnPage) {
-        if(imagesOnRow >= wantedImagesOnRow){
-            painter.translate(-imagesOnRow * imageSizeOnPage.width(), imageSizeOnPage.height());
-            imagesOnRow = 0;
-            rowsOnPage++;
-        }
-        if(rowsOnPage < wantedRowsOnPage && imagesOnRow < wantedImagesOnRow)
-            painter.drawImage(imagePlacement, image, imageSourceSize);
-            painter.drawImage(logoPlacement, logo, QRectF(0.0, 0.0f, logo.width(), logo.height())); //LOGO
-            painter.setPen(departmentPen);
-            painter.setFont(QFont("Myriad Pro", 12));
-            painter.drawText(departmentPlacement, department);
-            painter.setFont(QFont("times", 14));
-            painter.setPen(defaultPen);
-            painter.translate(offset);
-            imagesOnRow++;
-    }
+//    while (rowsOnPage < wantedRowsOnPage) {
+//        if(imagesOnRow >= wantedImagesOnRow){
+//            painter.translate(-imagesOnRow * imageSizeOnPage.width(), imageSizeOnPage.height());
+//            imagesOnRow = 0;
+//            rowsOnPage++;
+//        }
+//        if(rowsOnPage < wantedRowsOnPage && imagesOnRow < wantedImagesOnRow)
+//            painter.drawImage(imagePlacement, image, imageSourceSize);
+//            painter.drawImage(logoPlacement, logo, QRectF(0.0, 0.0f, logo.width(), logo.height()));
+//            painter.setPen(departmentPen);
+//            painter.setFont(QFont("Myriad Pro", 12));
+//            painter.drawText(departmentPlacement, department);
+//            painter.setFont(QFont("times", 14));
+//            painter.setPen(defaultPen);
+//            painter.translate(offset);
+//            imagesOnRow++;
+//    }
     painter.end();
     return 0;
 }

@@ -7,6 +7,7 @@
 
 #include <QPainter>
 #include <QPrinter>
+#include <QPicture>
 
 #include <person.h>
 #include "ticketwidget.h"
@@ -14,14 +15,14 @@
 class TicketPrinter
 {
 public:
-    TicketPrinter();
-    TicketPrinter(TicketWidget *parent = 0);
+    TicketPrinter(QPicture ticket, TicketWidget *parent = 0);
     int printMealTickets();
 
     //set placement testi
     void setTestPlacement(QRectF placement);
 
 private:
+    QPicture ticket;
     TicketWidget *parent;
     QPrinter *printer;
     QPainter *painter;

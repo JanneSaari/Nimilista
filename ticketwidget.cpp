@@ -4,34 +4,43 @@
 #include <QDir>
 #include <QPixmap>
 #include <QDate>
+#include <QPainter>
 
 TicketWidget::TicketWidget(MainWindow *parent)
     :parent(parent)
 {
-    QPixmap ticketImage(QDir::currentPath().append("/lippu_ei_logoa.png"));
+    ticketImage = QPixmap(QDir::currentPath().append("/lippu_ei_logoa.png"));
     imageLabel = new QLabel(this);
     imageLabel->setPixmap(ticketImage);
     imageLabel->setGeometry(0, 0, ticketImage.width(), ticketImage.height());
 
-    QPixmap logoImage(QDir::currentPath().append("/logo.png"));
+    logoImage = QPixmap(QDir::currentPath().append("/logo.png"));
     logoLabel = new MovableLabel(this);
-    logoLabel->setPixmap(logoImage.scaledToWidth(300, Qt::SmoothTransformation));
-    logoLabel->setGeometry(0, 0, 560, 200);
+    int logoScaledWidth = 300;
+    logoLabel->setPixmap(logoImage.scaledToWidth(logoScaledWidth, Qt::SmoothTransformation));
+    logoLabel->setGeometry(0, 0, logoScaledWidth, logoImage.scaledToWidth(logoScaledWidth).height());
 
-    nameLabel = new MovableLabel(this);
-    nameLabel->setGeometry(200, 150, 300, 250);
-    nameLabel->setText(tr("Esimerkki Nimi"));
-    nameLabel->setFont(QFont("Ariel", 30));
+//    nameLabel = new MovableLabel(this);
+//    nameLabel->setGeometry(200, 150, 300, 250);
+//    nameLabel->setText(tr("Esimerkki Nimi"));
+//    nameLabel->setFont(QFont("Ariel", 30));
 
-    dateLabel = new MovableLabel(this);
-    dateLabel->setGeometry(300, 300, 400, 400);
-    dateLabel->setText(QDate::currentDate().toString("dd.MM.yyyy"));
-    dateLabel->setFont(QFont("Ariel", 30));
+//    dateLabel = new MovableLabel(this);
+//    dateLabel->setGeometry(300, 300, 400, 400);
+//    dateLabel->setText(QDate::currentDate().toString("dd.MM.yyyy"));
+//    dateLabel->setFont(QFont("Ariel", 30));
 }
 
 void TicketWidget::printMealTickets()
 {
-    TicketPrinter testi(this);
+    QPainter painter;
+    painter.begin(&ticket);
+    painter.drawPixmap(imageLabel->geometry(), ticketImage, ticketImage.rect());
+    painter.drawPixmap(logoLabel->geometry(), logoImage, logoImage.rect());
+    painter.end();
+    ticket.save("ticket");
+
+    TicketPrinter testi(ticket, this);
     testi.setTestPlacement(logoLabel->geometry());
     testi.printMealTickets();
 }
