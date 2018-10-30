@@ -12,15 +12,26 @@
 class MainWindow;
 class QSortFilterProxyModel;
 
+enum Shifts
+{
+    ALL_SHIFTS,
+    MORNING_SHIFT,
+    DAY_SHIFT,
+    EVENING_SHIFT
+};
+
+
 class NamelistWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    NamelistWidget(MainWindow *parent = 0);
+    NamelistWidget(MainWindow *parent = nullptr);
     ~NamelistWidget();
     TableModel *table;
     Workstations *workstations;
+    Shifts shownShifts = ALL_SHIFTS;
+
     void readFromFile(const QString &fileName);
     void writeToFile(const QString &fileName);
 
@@ -29,6 +40,7 @@ public slots:
     void addEntry(Person person);
     void editEntry();
     void removeEntry();
+    void changeShownShifts();
 
 signals:
     void selectionChanged(const QItemSelection &selected);
@@ -38,11 +50,12 @@ private:
 
     MainWindow *parent;
     QTableView *tableView;
+    QSortFilterProxyModel *proxyModel;
+
 
     bool readingFromFile = false; //Used to prevent duplicate error while loading existing list from file.
     bool firstTimeOpening = true; //Prevents error when opening program for the first time.
 
-    QSortFilterProxyModel *proxyModel;
 };
 
 #endif // NAMELISTWIDGET_H

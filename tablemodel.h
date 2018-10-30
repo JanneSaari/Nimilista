@@ -12,7 +12,7 @@ class TableModel : public QAbstractTableModel
     Q_OBJECT
 
 public:
-    TableModel(QObject *parent = 0);
+    TableModel(QObject *parent = nullptr);
 
     int rowCount(const QModelIndex &parent) const override;
     int columnCount(const QModelIndex &parent) const override;

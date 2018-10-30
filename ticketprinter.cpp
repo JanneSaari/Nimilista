@@ -35,8 +35,8 @@ int TicketPrinter::paintImages(QPrinter &printer)
     //Use it to print full page of empty tickets and fill info if needed.
     //ATM this function prints images for each person in listOfPeople,
     //who are attending today. And after that, fills rest of the page with empty images.
-    QImage image(QDir::currentPath().append("/lippu_ei_logoa.png"));
-    QImage logo(QDir::currentPath().append("/logo.png"));
+    QImage image(QDir::currentPath().append("/lippu.png"));
+    //QImage logo(QDir::currentPath().append("/logo.png"));
 
     QPainter painter;
     if(!painter.begin(&printer)) {
@@ -55,6 +55,7 @@ int TicketPrinter::paintImages(QPrinter &printer)
 
     //Page and image settings
     QRectF pageSize = printer.pageRect();
+    //QRectF pageRect = pageSize.rectPixels(300);
     QSizeF imageSizeOnPage(pageSize.width() / wantedImagesOnRow, pageSize.height() / wantedRowsOnPage);
     QRectF imageSourceSize(0.0, 0.0, image.width(), image.height());
     QPoint offset(imageSizeOnPage.width(), 0.0);
@@ -83,7 +84,8 @@ int TicketPrinter::paintImages(QPrinter &printer)
 
     //Print images in 3*4 grid by translating painter by offset(image width on page, 0)
     //After row is full, translate to start of the next row or next page, if the page is full
-    painter.scale(qreal(imageSizeOnPage.width() / ticket.width()), qreal(imageSizeOnPage.height() / ticket.height()));
+    //painter.scale(qreal(imageSizeOnPage.width() / ticket.width()), qreal(imageSizeOnPage.height() / ticket.height()));
+    //painter.scale(0.5, 0.5);
     foreach(const Person &person, listOfPeople){
         if (isAttendingToday(dayOfWeek, person)) {
             //Translate painter to the new row if current one is full
@@ -101,18 +103,18 @@ int TicketPrinter::paintImages(QPrinter &printer)
                     rowsOnPage = 0;
                     painter.resetTransform();
             }
-            painter.drawPicture(0, 0, ticket);
-//            painter.drawImage(imagePlacement, image, imageSourceSize);
-//            painter.drawImage(logoPlacement, logo, QRectF(0.0, 0.0f, logo.width(), logo.height()));
-//            painter.drawText(textPlacement, person.name);
-//            painter.drawText(dayPlacement, day);
-//            painter.drawText(monthPlacement, month);
-//            painter.drawText(yearPlacement, year);
-//            painter.setFont(QFont("times", 12));
-//            painter.setPen(departmentPen);
-//            painter.drawText(departmentPlacement, department);
-//            painter.setFont(QFont("times", 14));
-//            painter.setPen(defaultPen);
+            //painter.drawPicture(0, 0, ticket);
+            painter.drawImage(imagePlacement, image, imageSourceSize);
+            //painter.drawImage(logoPlacement, logo, QRectF(0.0, 0.0f, logo.width(), logo.height()));
+            painter.drawText(textPlacement, person.name);
+            painter.drawText(dayPlacement, day);
+            painter.drawText(monthPlacement, month);
+            painter.drawText(yearPlacement, year);
+            painter.setFont(QFont("times", 12));
+            painter.setPen(departmentPen);
+            painter.drawText(departmentPlacement, department);
+            painter.setFont(QFont("times", 14));
+            painter.setPen(defaultPen);
             painter.translate(offset); //Move painter to the right by width of one ticket on page
             imagesOnRow++;
         }

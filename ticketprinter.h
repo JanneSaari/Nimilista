@@ -15,7 +15,7 @@
 class TicketPrinter
 {
 public:
-    TicketPrinter(QPicture ticket, TicketWidget *parent = 0);
+    TicketPrinter(QPicture ticket, TicketWidget *parent = nullptr);
     int printMealTickets();
 
     //set placement testi

@@ -38,11 +38,11 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
         }
         else if (index.column() == 2) {
             if(person.shift == 0)
-                return "Aamu";
+                return tr("Aamu");
             else if(person.shift == 1)
-                return "Päivä";
+                return tr("Päivä");
             else if(person.shift == 2)
-                return "Ilta";
+                return tr("Ilta");
         }
         else if (index.column() == 3){
             if(person.isMonday)

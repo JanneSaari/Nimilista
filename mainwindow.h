@@ -10,6 +10,7 @@
 #include <QDockWidget>
 #include <QHBoxLayout>
 #include <QPushButton>
+#include <QActionGroup>
 
 class TicketWidget;
 
@@ -31,6 +32,7 @@ private slots:
     void saveFile();
 
 private:
+    void createActions();
     void createMenus();
     void createButtons();
     void createTabs();
@@ -55,6 +57,7 @@ private:
     QMenu *fileMenu;
     QMenu *toolMenu;
     QMenu *ticketMenu;
+    QMenu *shiftMenu;
 
     //Actions
     QAction *openAct;
@@ -64,7 +67,14 @@ private:
     QAction *removeAct;
     QAction *addAct;
     QAction *printAct;
+    QAction *setDepartmentAction;
     QAction *openImageAct;
+
+    QActionGroup *shiftGroup;
+    QAction *allShiftsAction;
+    QAction *morningShiftAction;
+    QAction *dayShiftAction;
+    QAction *eveningShiftAction;
 
     QString department;
 };

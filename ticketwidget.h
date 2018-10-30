@@ -16,11 +16,13 @@ class TicketWidget : public QWidget
 public:
     TicketWidget(MainWindow *parent = Q_NULLPTR);
 
-    void printMealTickets();
     void setDepartment(QString newDepartment);
     QString getDepartment() const;
 
     MainWindow *parent;
+
+public slots:
+    void printTickets();
 
 private:
     QPicture ticket;

@@ -4,7 +4,6 @@
 #define ADDDIALOG_H
 
 #include <QDialog>
-#include <QspinBox>
 #include <QCheckBox>
 #include <QRadioButton>
 #include <QComboBox>
@@ -17,7 +16,6 @@ class QLabel;
 class QPushButton;
 class QTextEdit;
 class QLineEdit;
-class QSpinBox;
 class QCheckBox;
 class QRadioButton;
 class QComboBox;
@@ -28,7 +26,7 @@ class AddDialog : public QDialog
     Q_OBJECT
 
 public:
-    AddDialog(NamelistWidget *parent = 0);
+    AddDialog(NamelistWidget *parent = nullptr);
 
     QLineEdit *nameText;
     QTextEdit *informationText;

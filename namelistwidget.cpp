@@ -112,7 +112,6 @@ void NamelistWidget::addEntry(Person person)
 
 void NamelistWidget::editEntry()
 {
-    //TODO cleanup this function to smaller ones
     {
         QTableView *temp = static_cast<QTableView*>(tableView);
         QSortFilterProxyModel *proxy = static_cast<QSortFilterProxyModel*>(temp->model());
@@ -132,12 +131,11 @@ void NamelistWidget::editEntry()
 
             QModelIndex workstationIndex = table->index(row, 1, QModelIndex());
             QVariant varWorkstation = table->data(workstationIndex, Qt::DisplayRole);
-            person.workstation = varWorkstation.toUInt();
+            person.workstation = varWorkstation.toInt();
 
             QModelIndex shiftIndex = table->index(row, 2, QModelIndex());
             QVariant varShift= table->data(shiftIndex, Qt::DisplayRole);
 
-            //TODO vuoro ja workstation ei päivity kunnolla
             if(varShift == "Aamu")
                 person.shift = 0;
             else if(varShift == "Päivä")
@@ -185,7 +183,7 @@ void NamelistWidget::editEntry()
         aDialog.thursday->setChecked(person.isThursday);
         aDialog.friday->setChecked(person.isFriday);
 
-        aDialog.editedPersonWorkstation = person.workstation; //tracks persons workstation's number for enabling button for it after updating station list.
+        aDialog.editedPersonWorkstation = person.workstation; //tracks persons workstation's number to enable button for it after updating workstation list.
         aDialog.editedPersonShift = person.shift;
         aDialog.updateWorkstationList();
 
@@ -263,6 +261,29 @@ void NamelistWidget::removeEntry()
         workstations->freeWorkstation(table->getPeople().at(row));
         table->removeRows(row, 1, QModelIndex());
     }
+}
+
+#include <iostream>
+void NamelistWidget::changeShownShifts()
+{
+    if(shownShifts == Shifts::ALL_SHIFTS) {
+        proxyModel->setFilterRegExp(QRegExp(tr(""), Qt::CaseInsensitive));
+        proxyModel->setFilterKeyColumn(2);
+        std::cout << "Kaikki" << std::endl;
+    }
+    else if(shownShifts == Shifts::MORNING_SHIFT) {
+        proxyModel->setFilterRegExp(QRegExp(tr("Aamu"), Qt::CaseInsensitive));
+        std::cout << "Aamu" << std::endl;
+    }
+    else if(shownShifts == Shifts::DAY_SHIFT) {
+        proxyModel->setFilterRegExp(QRegExp(tr("Päivä"), Qt::CaseInsensitive));
+        std::cout << "Päivä" << std::endl;
+    }
+    else if(shownShifts == Shifts::EVENING_SHIFT) {
+        proxyModel->setFilterRegExp(QRegExp(tr("Ilta"), Qt::CaseInsensitive));
+        std::cout << "Ilta" << std::endl;
+    }
+    proxyModel->setFilterKeyColumn(2);
 }
 
 void NamelistWidget::readFromFile(const QString &fileName)

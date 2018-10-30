@@ -25,16 +25,10 @@ public:
     QString information;
 
     Person();
-//    Person(QString name = "Esimerkki",  int workstation = 1, int shift = 0,
-//           bool isMonday = false, bool isTuesday = false, bool isWednesday = false,
-//           bool isThursday = false, bool isFriday = false, QString information = "Esimerkki tekstiä");
 
     bool operator==(const Person &other) const
     {
         return name == other.name;
-//                && workstation == other.workstation && isEvening == other.shift
-//                && isMonday == other.isMonday && isTuesday == other.isTuesday && isWednesday == other.isWednesday
-//                && isThursday == other.isThursday && isFriday == other.isFriday &&information == other.information;
     }
 };
 

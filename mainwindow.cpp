@@ -13,11 +13,12 @@ MainWindow::MainWindow()
     resize(1200, 800);
     mainWidget = new QTabWidget(this);
     createTabs();
+    createActions();
     createMenus();
     createButtons();
     setWindowTitle("Nimilista");
     loadSettings();
-    if(department == NULL)
+    if(department.isEmpty())
         openDepartmentDialog();
 }
 
@@ -26,52 +27,90 @@ MainWindow::~MainWindow()
     saveSettings();
 }
 
-void MainWindow::createMenus()
+void MainWindow::createActions()
 {
-    fileMenu = menuBar()->addMenu(tr("&Tiedosto")); //tr() can be used to add translations
-
     openAct = new QAction(tr("&Avaa..."), this);
-    fileMenu->addAction(openAct);
     connect(openAct, &QAction::triggered, this, &MainWindow::openFile);
 
     saveAct = new QAction(tr("&Tallenna..."), this);
-    fileMenu->addAction(saveAct);
     connect(saveAct, &QAction::triggered, this, &MainWindow::saveFile);
 
-    fileMenu->addSeparator();
-
     exitAct = new QAction(tr("&Sulje..."), this);
-    fileMenu->addAction(exitAct);
     connect(exitAct, &QAction::triggered, this, &QWidget::close);
 
-    toolMenu = menuBar()->addMenu(tr("&Työkalut"));
-
     addAct = new QAction(tr("&Lisää Henkilö..."), this);
-    toolMenu->addAction(addAct);
     connect(addAct, &QAction::triggered, namelistWidget, &NamelistWidget::showAddEntryDialog);
 
     editAct = new QAction(tr("&Muokkaa Henkilöä..."), this);
     editAct->setEnabled(false);
-    toolMenu->addAction(editAct);
     connect(editAct, &QAction::triggered, namelistWidget, &NamelistWidget::editEntry);
-
-    toolMenu->addSeparator();
 
     removeAct = new QAction(tr("&Poista Henkilö..."), this);
     removeAct->setEnabled(false);
-    toolMenu->addAction(removeAct);
     connect(removeAct, &QAction::triggered, namelistWidget, &NamelistWidget::removeEntry);
 
+    printAct = new QAction(tr("&Piirrä aterialiput"), this);
+    connect(printAct, &QAction::triggered, ticketWidget, &TicketWidget::printTickets);
+
+    setDepartmentAction = new QAction(tr("&Aseta paja"), this);
+    connect(setDepartmentAction, &QAction::triggered, this, &MainWindow::openDepartmentDialog);
+
+    allShiftsAction = new QAction(tr("&Kaikki vuorot"), this);
+    morningShiftAction = new QAction(tr("&Aamuvuoro"), this);
+    dayShiftAction = new QAction(tr("&Päivävuoro"), this);
+    eveningShiftAction = new QAction(tr("&Iltavuoro"), this);
+
+    connect(allShiftsAction, &QAction::triggered, [this](){
+        namelistWidget->shownShifts = Shifts::ALL_SHIFTS;
+        namelistWidget->changeShownShifts();
+    });
+    connect(morningShiftAction, &QAction::triggered, [this](){
+        namelistWidget->shownShifts = Shifts::MORNING_SHIFT;
+        namelistWidget->changeShownShifts();
+    });
+    connect(dayShiftAction, &QAction::triggered, [this](){
+        namelistWidget->shownShifts = Shifts::DAY_SHIFT;
+        namelistWidget->changeShownShifts();
+    });
+    connect(eveningShiftAction, &QAction::triggered, [this](){
+        namelistWidget->shownShifts = Shifts::EVENING_SHIFT;
+        namelistWidget->changeShownShifts();
+    });
+
+    shiftGroup = new QActionGroup(this);
+    shiftGroup->addAction(allShiftsAction);
+    shiftGroup->addAction(morningShiftAction);
+    shiftGroup->addAction(dayShiftAction);
+    shiftGroup->addAction(eveningShiftAction);
+    shiftGroup->setExclusive(true);
+    allShiftsAction->setChecked(true);
+
     connect(namelistWidget, &NamelistWidget::selectionChanged, this, &MainWindow::updateActions);
+}
+
+void MainWindow::createMenus()
+{
+    fileMenu = menuBar()->addMenu(tr("&Tiedosto"));
+    fileMenu->addAction(openAct);
+    fileMenu->addAction(saveAct);
+    fileMenu->addSeparator();
+    fileMenu->addAction(exitAct);
+
+    toolMenu = menuBar()->addMenu(tr("&Työkalut"));
+    toolMenu->addAction(addAct);
+    toolMenu->addAction(editAct);
+    toolMenu->addSeparator();
+    toolMenu->addAction(removeAct);
+
+    shiftMenu = menuBar()->addMenu(tr("&Vuoro"));
+    shiftMenu->addAction(allShiftsAction);
+    shiftMenu->addAction(morningShiftAction);
+    shiftMenu->addAction(dayShiftAction);
+    shiftMenu->addAction(eveningShiftAction);
 
     ticketMenu = menuBar()->addMenu(tr("&Aterialiput"));
-    printAct = new QAction(tr("&Piirrä aterialiput"), this);
-
     ticketMenu->addAction(printAct);
-    //connect(printAct, &QAction::triggered, namelistWidget, &NamelistWidget::printMealTickets);
-
-    QAction* setDepartmentAction = ticketMenu->addAction(tr("Aseta paja"));
-    connect(setDepartmentAction, &QAction::triggered, this, &MainWindow::openDepartmentDialog);
+    ticketMenu->addAction(setDepartmentAction);
 }
 
 void MainWindow::createButtons()
@@ -88,21 +127,21 @@ void MainWindow::createButtons()
 
     addPersonButton = new QPushButton(tr("Lisää"), this);
     buttonLayout->addWidget(addPersonButton);
-    connect(addPersonButton, QPushButton::clicked, namelistWidget, &NamelistWidget::showAddEntryDialog);
+    connect(addPersonButton, SIGNAL(clicked()), namelistWidget, SLOT(showAddEntryDialog()));
 
     editPersonButton = new QPushButton(tr("Muokkaa"), this);
     editPersonButton->setEnabled(false);
     buttonLayout->addWidget(editPersonButton);
-    connect(editPersonButton, QPushButton::clicked, namelistWidget, &NamelistWidget::editEntry);
+    connect(editPersonButton, SIGNAL(clicked()), namelistWidget, SLOT(editEntry()));
 
     removePersonButton = new QPushButton(tr("Poista"), this);
     removePersonButton->setEnabled(false);
     buttonLayout->addWidget(removePersonButton);
-    connect(removePersonButton, QPushButton::clicked, namelistWidget, &NamelistWidget::removeEntry);
+    connect(removePersonButton, SIGNAL(clicked()), namelistWidget, SLOT(removeEntry()));
 
     drawTicketsButton = new QPushButton(tr("Piirrä aterialiput"), this);
     buttonLayout->addWidget(drawTicketsButton);
-    connect(drawTicketsButton, QPushButton::clicked, ticketWidget, &TicketWidget::printMealTickets);
+    connect(drawTicketsButton, &QPushButton::clicked, ticketWidget, &TicketWidget::printTickets);
 }
 
 void MainWindow::createTabs()
@@ -110,10 +149,10 @@ void MainWindow::createTabs()
     namelistWidget = new NamelistWidget(this);
     ticketWidget = new TicketWidget(this);
     mainWidget->addTab(namelistWidget, tr("Nimilista"));
-    mainWidget->addTab(ticketWidget, tr("Aterialipput"));
+    //mainWidget->addTab(ticketWidget, tr("Aterialippu"));
     setCentralWidget(mainWidget);
     //setStyleSheet("QTabWidget::pane { border: 0; }");
-    mainWidget->setCurrentIndex(1);
+    mainWidget->setCurrentIndex(0);
 }
 
 void MainWindow::updateActions(const QItemSelection &selection)
@@ -164,7 +203,6 @@ void MainWindow::loadSettings()
 {
     QFile settingsFile("settings");
     if(!settingsFile.open(QIODevice::ReadOnly)) {
-        //ERROR
         return;
     }
     QDataStream in(&settingsFile);

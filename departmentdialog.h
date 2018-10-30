@@ -13,7 +13,7 @@
 class DepartmentDialog : public QDialog
 {
 public:
-    DepartmentDialog(MainWindow *parent = 0);
+    DepartmentDialog(MainWindow *parent = nullptr);
 
     QLineEdit* departmentName;
 

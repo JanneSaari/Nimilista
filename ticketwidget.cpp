@@ -31,7 +31,7 @@ TicketWidget::TicketWidget(MainWindow *parent)
 //    dateLabel->setFont(QFont("Ariel", 30));
 }
 
-void TicketWidget::printMealTickets()
+void TicketWidget::printTickets()
 {
     QPainter painter;
     painter.begin(&ticket);
