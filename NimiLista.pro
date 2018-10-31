@@ -35,7 +35,8 @@ SOURCES += \
     departmentdialog.cpp \
     ticketwidget.cpp \
     movablelabel.cpp \
-    ticketprinter.cpp
+    ticketprinter.cpp \
+    tableprinter.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -47,7 +48,11 @@ HEADERS += \
     departmentdialog.h \
     ticketwidget.h \
     movablelabel.h \
-    ticketprinter.h
+    ticketprinter.h \
+    tableprinter.h
 
 FORMS += \
         mainwindow.ui
+
+DISTFILES += \
+    LICENSE.txt
