@@ -1,0 +1,85 @@
+Tehty käyttäen QT 5.9.2
+
+Main
+	->MainWindow
+		->NameListWidget (hoitaa nimilistaan liittyvät asiat ja TableModelin näyttämisen tableView:llä.)
+			->TableModel (taulukoi henkilöiden datan listasta (QList<person> listOfPeople))
+			->TablePrinter (printtaa taulukon valitusta vuorosta .pdf muotoon) (Copyright (c) 2016, Anton Onishchenko, https://github.com/T0ny0/Qt-Table-Printer)
+			->AddDialog (avaa ikkunan uuden henkilön lisäämiseen ja muokkaamiseen)
+			->Workstations (kerää varatut työpisteet ja varaajan nimen ja antaa tiedon AddDialog:lle, joka voi poistaa varatut työpisteet käytöstä)
+			->Person (henkilön tiedot yhteen kerättynä.)
+		->TicketWidget (hoitaa aterialippuihin liittyvät asiat. Voidaan avata toiseen välilehteen MainWindow:ssa, jolloin tästä pystyy asettamaan 
+						tekstin ja kuvien kohdan lipukkeessa. Tämä ei toimi kunnolla tällä hetkellä ja on kommentoitu pois koodissa.)
+			->TicketPrinter (printtaa lipukkeet sinä päivänä osallistujille .pdf muotoon. Yritin tehdä toista välilehteä 
+							mainWindowiin, josta voisi asettaa tekstien ja logon kohdan lipukkeeseen suoraa ohjelmasta
+							(tällä hetkellä asetettu koodissa), mutta tämä jäi kesken. Kuva aukeaa ja movableLabel on 
+							liikutettavissa, mutta lipukkeet eivät piirry oikean kokoisina. Koodi on kommentoitu pois ohjelmasssa.)
+			->MovableLabel (liikutettava leima, jolla voisi asettaa lipukkeeseen nimen ja logon ja mahdollisesti muiden asioiden kohdan.
+							Tällähetkellä liikkuu ja asettaa kohdan, mutta välilehti ei ole käytössä. Tätä käyttävä koodi on kommentoitu pois ohjelmasssa)
+		->DepartemnDialog (avaa ikkunan pajan asettamiseen)
+
+		
+
+Alla ohjeet uuden vuoron ja sarakkeen lisäämiseen tai vanhan poistamiseen.
+Jos huomaat, että jotain puuttuu niistä, lisääthän sen tänne.		
+		
+Uuden vuoron lisäys/poisto
+	AddDialog.h
+		- uusi QRadioButton
+		- uusi QVector<ReservedWorktation>
+	AddDialog.cpp
+		- AddDialog()			- hae uusi ReservedWorktation lista parent->worksations->...
+		- AddDialog()			- tee ja lisää uusi vuoro QRadioButton shift QButtonGroup:iin
+		- AddDialog()			- connect() uusi QRadioButton &AddDialog::updateWorkstationList()
+		- updateWorkstationList	- uusi else if(isChecked()) {}
+	MainWindow.h
+		- uusi QAction
+	MainWindow.cpp
+		- createActions()		- tee ja connect() uusi vuoro QAction ja lisää se shiftGroup QButtonGroup:iin
+		- createMenus()			- lisää uusi QAction shiftMenuun
+	NameListWidget.h
+		- enum Shifts
+	NameListWidget.cpp
+		- showAddEntryDialog()	- uusi else if{}
+		- editEntry() 			- uusi else if{} 3 eri kohtaan
+		- changeShownShifts() 	- uusi else if{}
+	TableModel.cpp
+		- data()				- uusi else if{}
+	Workstations.h
+		- uusi QVector<ReservedWorktation> ja uusi getteri sille (nämä voisi voihtaa publiciksi jos haluaa)
+	Workstations.cpp
+		- freeWorkstations()	- uusi else if{}
+		- setWorkstations()		- uusi else if{}
+		- uusi getteri uudelle vuorolle
+		
+	
+Uuden sarakkeen lisäys/poisto
+	TableModel.cpp
+		- columnCount()			- päivitä return arvo sarakkeiden määrän mukaiseksi
+		- data()				- uusi else if {} halutulle indeksille
+		- headerData()			- uusi case halutulle otsikolle
+		- setData()				- uusi else if{}, joka asettaa arvon halutulla tavalla
+	NameListWidget.cpp
+		- addEntry()			- uusi table->setData() 
+		- editEntry()			- uusi indeksi 3 eri kohtaan 
+		- printTable()			- uusi numero columnStretch:iin, joka kuvaa arvoja, jonka mukaan printattu taulukko on venytetty(Jokainen arvo vastaa saraketta)
+	Person.h
+		- uusi arvo tarvittaessa
+		- lisää se myös QDataStream operaattoreihin
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
