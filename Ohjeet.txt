@@ -42,7 +42,7 @@ Uuden vuoron lisäys/poisto
 		- createActions()		- tee ja connect() uusi vuoro QAction ja lisää se shiftGroup QButtonGroup:iin
 		- createMenus()			- lisää uusi QAction shiftMenuun
 	NameListWidget.h
-		- enum Shifts
+		- enum Shifts			- lisää uusi arvo
 	NameListWidget.cpp
 		- showAddEntryDialog()	- uusi else if{}
 		- editEntry() 			- uusi else if{} 3 eri kohtaan
@@ -58,8 +58,9 @@ Uuden vuoron lisäys/poisto
 		
 	
 Uuden sarakkeen lisäys/poisto
+	TableModel.h
+		- enum Columns			- lisää uusi arvo
 	TableModel.cpp
-		- columnCount()			- päivitä return arvo sarakkeiden määrän mukaiseksi
 		- data()				- uusi else if {} halutulle indeksille
 		- headerData()			- uusi case halutulle otsikolle
 		- setData()				- uusi else if{}, joka asettaa arvon halutulla tavalla
