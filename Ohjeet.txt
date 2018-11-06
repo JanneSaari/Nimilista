@@ -1,5 +1,8 @@
 Tehty käyttäen QT 5.9.2
 
+Ohjelman tekeminen Windowsille käy helpoiten seuraamalla ohjeita http://doc.qt.io/qt-5/windows-deployment.html
+
+
 Main
 	->MainWindow
 		->NameListWidget (hoitaa nimilistaan liittyvät asiat ja TableModelin näyttämisen tableView:llä.)
