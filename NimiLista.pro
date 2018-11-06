@@ -56,5 +56,4 @@ FORMS += \
 
 DISTFILES += \
     LICENSE.txt \
-    README.md \
     testi.qmodel

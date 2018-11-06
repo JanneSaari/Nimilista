@@ -40,10 +40,6 @@ int TicketPrinter::printMealTickets()
     printer.setOutputFormat(QPrinter::PdfFormat);
     printer.setOrientation(QPrinter::Landscape);
     printer.setResolution(300);
-    //TODO let the user choose where to save pdf file
-    //QFileDialog opens the file selection popup and returns QString
-    QFile pdfFile;
-    //---------------------------------
     printer.setOutputFileName(QDir::currentPath().append("/aterialiput.pdf"));
     if(paintImages(printer)) {
         qWarning("Kuvia ei pystytty piirtämään");

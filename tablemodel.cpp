@@ -38,7 +38,7 @@ int TableModel::rowCount(const QModelIndex &parent) const
 int TableModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    return 9;
+    return MAX_COLUMNS;
 }
 
 QVariant TableModel::data(const QModelIndex &index, int role) const
@@ -52,15 +52,15 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
     if (role == Qt::DisplayRole) {
         const auto &person = listOfPeople.at(index.row());
 
-        if (index.column() == 0)
+        if (index.column() == Columns::NAME)
             return person.name;
-        else if (index.column() == 1) {
+        else if (index.column() == Columns::WORKSTATIONS) {
             if(person.workstation == -1 || person.workstation == 0)
                 return "Ei työpistettä";
             else
                 return person.workstation;
         }
-        else if (index.column() == 2) {
+        else if (index.column() == Columns::SHIFT) {
             if(person.shift == 0)
                 return tr("Aamu");
             else if(person.shift == 1)
@@ -68,27 +68,27 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
             else if(person.shift == 2)
                 return tr("Ilta");
         }
-        else if (index.column() == 3){
+        else if (index.column() == Columns::MONDAY){
             if(person.isMonday)
                 return "X";
             }
-        else if (index.column() == 4){
+        else if (index.column() == Columns::TUESDAY){
             if(person.isTuesday)
                 return "X";
             }
-        else if (index.column() == 5){
+        else if (index.column() == Columns::WEDNESDAY){
             if(person.isWednesday)
                 return "X";
         }
-        else if (index.column() == 6){
+        else if (index.column() == Columns::THURSDAY){
             if(person.isThursday)
                 return "X";
             }
-        else if (index.column() == 7){
+        else if (index.column() == Columns::FRIDAY){
             if(person.isFriday)
                 return "X";
             }
-        else if (index.column() == 8)
+        else if (index.column() == Columns::INFO)
             return person.information;
     }
     return QVariant();
@@ -101,23 +101,23 @@ QVariant TableModel::headerData(int section, Qt::Orientation orientation, int ro
 
     if (orientation == Qt::Horizontal) {
         switch (section) {
-            case 0:
+            case Columns::NAME:
                 return tr("Nimi");
-            case 1:
+            case Columns::WORKSTATIONS:
                 return tr("Työpiste");
-            case 2:
+            case Columns::SHIFT:
                 return tr("Vuoro");
-            case 3:
+            case Columns::MONDAY:
                 return tr("Ma");
-            case 4:
+            case Columns::TUESDAY:
                 return tr("Ti");
-            case 5:
+            case Columns::WEDNESDAY:
                 return tr("Ke");
-            case 6:
+            case Columns::THURSDAY:
                 return tr("To");
-            case 7:
+            case Columns::FRIDAY:
                 return tr("Pe");
-            case 8:
+            case Columns::INFO:
                 return tr("Lisätietoa");
 
             default:
@@ -159,23 +159,23 @@ bool TableModel::setData(const QModelIndex &index, const QVariant &value, int ro
 
         auto person = listOfPeople.value(row);
 
-        if (index.column() == 0)
+        if (index.column() == Columns::NAME)
             person.name = value.toString();
-        else if(index.column() == 1)
+        else if(index.column() == Columns::WORKSTATIONS)
             person.workstation = value.toInt();
-        else if(index.column() == 2)
+        else if(index.column() == Columns::SHIFT)
             person.shift = value.toInt();
-        else if(index.column() == 3)
+        else if(index.column() == Columns::MONDAY)
             person.isMonday = value.toBool();
-        else if(index.column() == 4)
+        else if(index.column() == Columns::TUESDAY)
             person.isTuesday = value.toBool();
-        else if(index.column() == 5)
+        else if(index.column() == Columns::WEDNESDAY)
             person.isWednesday = value.toBool();
-        else if(index.column() == 6)
+        else if(index.column() == Columns::THURSDAY)
             person.isThursday = value.toBool();
-        else if(index.column() == 7)
+        else if(index.column() == Columns::FRIDAY)
             person.isFriday = value.toBool();
-        else if (index.column() == 8)
+        else if (index.column() == Columns::INFO)
             person.information = value.toString();
         else
             return false;

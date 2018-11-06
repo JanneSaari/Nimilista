@@ -101,23 +101,23 @@ void NamelistWidget::addEntry(Person person)
     if (!table->getPeople().contains(person)) {
         table->insertRows(0, 1, QModelIndex());
 
-        QModelIndex index = table->index(0, 0, QModelIndex());
+        QModelIndex index = table->index(0, TableModel::Columns::NAME, QModelIndex());
         table->setData(index, person.name, Qt::EditRole);
-        index = table->index(0, 1, QModelIndex());
+        index = table->index(0, TableModel::Columns::WORKSTATIONS, QModelIndex());
         table->setData(index, QVariant(person.workstation), Qt::EditRole);
-        index = table->index(0, 2, QModelIndex());
+        index = table->index(0, TableModel::Columns::SHIFT, QModelIndex());
         table->setData(index, QVariant(person.shift), Qt::EditRole);
-        index = table->index(0, 3, QModelIndex());
+        index = table->index(0, TableModel::Columns::MONDAY, QModelIndex());
         table->setData(index, QVariant(person.isMonday), Qt::EditRole);
-        index = table->index(0, 4, QModelIndex());
+        index = table->index(0, TableModel::Columns::TUESDAY, QModelIndex());
         table->setData(index, QVariant(person.isTuesday), Qt::EditRole);
-        index = table->index(0, 5, QModelIndex());
+        index = table->index(0, TableModel::Columns::WEDNESDAY, QModelIndex());
         table->setData(index, QVariant(person.isWednesday), Qt::EditRole);
-        index = table->index(0, 6, QModelIndex());
+        index = table->index(0, TableModel::Columns::THURSDAY, QModelIndex());
         table->setData(index, QVariant(person.isThursday), Qt::EditRole);
-        index = table->index(0, 7, QModelIndex());
+        index = table->index(0, TableModel::Columns::FRIDAY, QModelIndex());
         table->setData(index, QVariant(person.isFriday), Qt::EditRole);
-        index = table->index(0, 8, QModelIndex());
+        index = table->index(0, TableModel::Columns::INFO, QModelIndex());
         table->setData(index, person.information, Qt::EditRole);
 
         workstations->setWorkstation(person);
@@ -147,15 +147,15 @@ void NamelistWidget::editEntry()
     foreach (QModelIndex index, indexes) {
         row = proxy->mapToSource(index).row();
 
-        QModelIndex nameIndex = table->index(row, 0, QModelIndex());
+        QModelIndex nameIndex = table->index(row, TableModel::Columns::NAME, QModelIndex());
         QVariant varName = table->data(nameIndex, Qt::DisplayRole);
         person.name = varName.toString();
 
-        QModelIndex workstationIndex = table->index(row, 1, QModelIndex());
+        QModelIndex workstationIndex = table->index(row, TableModel::Columns::WORKSTATIONS, QModelIndex());
         QVariant varWorkstation = table->data(workstationIndex, Qt::DisplayRole);
         person.workstation = varWorkstation.toInt();
 
-        QModelIndex shiftIndex = table->index(row, 2, QModelIndex());
+        QModelIndex shiftIndex = table->index(row, TableModel::Columns::SHIFT, QModelIndex());
         QVariant varShift= table->data(shiftIndex, Qt::DisplayRole);
 
         if(varShift == "Aamu")
@@ -165,23 +165,23 @@ void NamelistWidget::editEntry()
         else if(varShift == "Ilta")
             person.shift = 2;
 
-        QModelIndex mondayIndex = table->index(row, 3, QModelIndex());
+        QModelIndex mondayIndex = table->index(row, TableModel::Columns::MONDAY, QModelIndex());
         QVariant varMonday= table->data(mondayIndex, Qt::DisplayRole);
         person.isMonday = varMonday.toBool();
-        QModelIndex tuesdayIndex = table->index(row, 4, QModelIndex());
+        QModelIndex tuesdayIndex = table->index(row, TableModel::Columns::TUESDAY, QModelIndex());
         QVariant varTuesday= table->data(tuesdayIndex, Qt::DisplayRole);
         person.isTuesday = varTuesday.toBool();
-        QModelIndex wednesdayIndex = table->index(row, 5, QModelIndex());
+        QModelIndex wednesdayIndex = table->index(row, TableModel::Columns::WEDNESDAY, QModelIndex());
         QVariant varWednesday= table->data(wednesdayIndex, Qt::DisplayRole);
         person.isWednesday = varWednesday.toBool();
-        QModelIndex thursdayIndex = table->index(row, 6, QModelIndex());
+        QModelIndex thursdayIndex = table->index(row, TableModel::Columns::THURSDAY, QModelIndex());
         QVariant varThursday= table->data(thursdayIndex, Qt::DisplayRole);
         person.isThursday = varThursday.toBool();
-        QModelIndex fridayIndex = table->index(row, 7, QModelIndex());
+        QModelIndex fridayIndex = table->index(row, TableModel::Columns::FRIDAY, QModelIndex());
         QVariant varFriday= table->data(fridayIndex, Qt::DisplayRole);
         person.isFriday = varFriday.toBool();
 
-        QModelIndex informationIndex = table->index(row, 8, QModelIndex());
+        QModelIndex informationIndex = table->index(row, TableModel::Columns::INFO, QModelIndex());
         QVariant varInformation = table->data(informationIndex, Qt::DisplayRole);
         person.information = varInformation.toString();
     }
@@ -217,12 +217,12 @@ void NamelistWidget::editEntry()
     if (aDialog.exec()) {
         newValues.name = aDialog.nameText->text();
         if (newValues.name!= person.name) {
-            QModelIndex index = table->index(row, 0, QModelIndex());
+            QModelIndex index = table->index(row, TableModel::Columns::NAME, QModelIndex());
             table->setData(index, QVariant(newValues.name), Qt::EditRole);
         }
         newValues.workstation = aDialog.workstationButtonGroup->checkedId();
         if (newValues.workstation!= person.workstation) {
-            QModelIndex index = table->index(row, 1, QModelIndex());
+            QModelIndex index = table->index(row, TableModel::Columns::WORKSTATIONS, QModelIndex());
             table->setData(index, QVariant(newValues.workstation), Qt::EditRole);
         }
 
@@ -234,37 +234,37 @@ void NamelistWidget::editEntry()
             newValues.shift = 2;
 
         if (newValues.shift != person.shift) {
-            QModelIndex index = table->index(row, 2, QModelIndex());
+            QModelIndex index = table->index(row, TableModel::Columns::SHIFT, QModelIndex());
             table->setData(index, QVariant(newValues.shift), Qt::EditRole);
         }
         newValues.isMonday= aDialog.monday->isChecked();
         if (newValues.isMonday!= person.isMonday) {
-            QModelIndex index = table->index(row, 3, QModelIndex());
+            QModelIndex index = table->index(row, TableModel::Columns::MONDAY, QModelIndex());
             table->setData(index, QVariant(newValues.isMonday), Qt::EditRole);
         }
         newValues.isTuesday= aDialog.tuesday->isChecked();
         if (newValues.isTuesday!= person.isTuesday) {
-            QModelIndex index = table->index(row, 4, QModelIndex());
+            QModelIndex index = table->index(row, TableModel::Columns::TUESDAY, QModelIndex());
             table->setData(index, QVariant(newValues.isTuesday), Qt::EditRole);
         }
         newValues.isWednesday= aDialog.wednesday->isChecked();
         if (newValues.isWednesday!= person.isWednesday) {
-            QModelIndex index = table->index(row, 5, QModelIndex());
+            QModelIndex index = table->index(row, TableModel::Columns::WEDNESDAY, QModelIndex());
             table->setData(index, QVariant(newValues.isWednesday), Qt::EditRole);
         }
         newValues.isThursday= aDialog.thursday->isChecked();
         if (newValues.isThursday!= person.isThursday) {
-            QModelIndex index = table->index(row, 6, QModelIndex());
+            QModelIndex index = table->index(row, TableModel::Columns::THURSDAY, QModelIndex());
             table->setData(index, QVariant(newValues.isThursday), Qt::EditRole);
         }
         newValues.isFriday= aDialog.friday->isChecked();
         if (newValues.isFriday!= person.isFriday) {
-            QModelIndex index = table->index(row, 7, QModelIndex());
+            QModelIndex index = table->index(row, TableModel::Columns::FRIDAY, QModelIndex());
             table->setData(index, QVariant(newValues.isFriday), Qt::EditRole);
         }
         newValues.information = aDialog.informationText->toPlainText();
         if (newValues.information!= person.information) {
-            QModelIndex index = table->index(row, 8, QModelIndex());
+            QModelIndex index = table->index(row, TableModel::Columns::INFO, QModelIndex());
             table->setData(index, newValues.information, Qt::EditRole);
         }
         workstations->freeWorkstation(person);
@@ -302,7 +302,7 @@ void NamelistWidget::changeShownShifts()
     else if(shownShifts == Shifts::EVENING_SHIFT) {
         proxyModel->setFilterRegExp(QRegExp(tr("Ilta"), Qt::CaseInsensitive));
     }
-    proxyModel->setFilterKeyColumn(2);
+    proxyModel->setFilterKeyColumn(TableModel::Columns::SHIFT);
 }
 
 void NamelistWidget::printTable()

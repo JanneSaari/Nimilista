@@ -49,6 +49,20 @@ public:
     QList<Person> getPeople() const;
     void resetTable();
 
+    enum Columns
+    {
+        NAME,
+        WORKSTATIONS,
+        SHIFT,
+        MONDAY,
+        TUESDAY,
+        WEDNESDAY,
+        THURSDAY,
+        FRIDAY,
+        INFO,
+        MAX_COLUMNS
+    };
+
 private:
     QList<Person> listOfPeople;
 };

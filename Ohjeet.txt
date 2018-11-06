@@ -1,4 +1,5 @@
 Tehty käyttäen QT 5.9.2
+Koodi on löydettävissä myös https://github.com/JanneSaari/Nimilista
 
 Ohjelman tekeminen Windowsille käy helpoiten seuraamalla ohjeita http://doc.qt.io/qt-5/windows-deployment.html
 
@@ -69,9 +70,7 @@ Uuden sarakkeen lisäys/poisto
 	Person.h
 		- uusi arvo tarvittaessa
 		- lisää se myös QDataStream operaattoreihin
-		
-		
-		
+				
 		
 		
 		
