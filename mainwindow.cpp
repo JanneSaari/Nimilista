@@ -180,7 +180,7 @@ void MainWindow::createTabs()
     mainWidget->addTab(namelistWidget, tr("Nimilista"));
     setCentralWidget(mainWidget);
     mainWidget->setCurrentIndex(0);
-    mainWidget->addTab(ticketWidget, tr("Lippu")); //Setting text and image positions to the ticket from program doesn't work correctly at the moment
+    //mainWidget->addTab(ticketWidget, tr("Lippu")); //Setting text and image positions to the ticket from program doesn't work correctly at the moment
 }
 
 void MainWindow::updateActions(const QItemSelection &selection)
