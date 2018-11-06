@@ -38,12 +38,9 @@ AddDialog::AddDialog(NamelistWidget *parent)
     ReservedEveningWorkstations = parent->workstations->getReservedEveningWorkstations();
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
-    //Top layout contains left and right side layouts and bottom contains OK and cancel buttons
-    QHBoxLayout *topLayout = new QHBoxLayout(this);
-    //Left side of the dialog box contains name and info fields, and day and shift selections
-    QVBoxLayout *leftSideLayout = new QVBoxLayout(this);
-    //Name and info fields
-    QFormLayout *nameLayout = new QFormLayout(this);
+    QHBoxLayout *topLayout = new QHBoxLayout(this); //Top layout contains left and right side layouts and bottom contains OK and cancel buttons
+    QVBoxLayout *leftSideLayout = new QVBoxLayout(this); //Left side of the dialog box contains name and info fields, and day and shift selections
+    QFormLayout *nameLayout = new QFormLayout(this); //Name and info fields
     nameLabel = new QLabel(tr("Nimi"), this);
     nameText = new QLineEdit(this);
     nameLayout->addRow(nameLabel, nameText);
@@ -60,7 +57,7 @@ AddDialog::AddDialog(NamelistWidget *parent)
     evening = new QRadioButton(tr("Ilta"), this);
     shift->addButton(morning);
     shift->addButton(day);
-    shift->addButton(evening);
+    shift->addButton(evening); 
     QVBoxLayout *shiftLayout = new QVBoxLayout(this);
     shiftLayout->addWidget(morning);
     shiftLayout->addWidget(day);
@@ -130,9 +127,11 @@ AddDialog::AddDialog(NamelistWidget *parent)
 
     connect(okButton, &QAbstractButton::clicked, this, &QDialog::accept);
     connect(cancelButton, &QAbstractButton::clicked, this, &QDialog::reject);
-    connect(morning, QRadioButton::clicked, this, &AddDialog::updateWorkstationList);
-    connect(day, QRadioButton::clicked, this, &AddDialog::updateWorkstationList);
-    connect(evening, QRadioButton::clicked, this, &AddDialog::updateWorkstationList);
+
+    connect(morning, &QRadioButton::clicked, this, &AddDialog::updateWorkstationList);
+    connect(day, &QRadioButton::clicked, this, &AddDialog::updateWorkstationList);
+    connect(evening, &QRadioButton::clicked, this, &AddDialog::updateWorkstationList);
+
     morning->setChecked(true);
     updateWorkstationList();
 
@@ -143,13 +142,13 @@ void AddDialog::updateWorkstationList()
 {
     if(morning->isChecked()){
         for(int iii = 1; iii <= numberOfWorkstations; iii++) {
-            ReservedWorkstation testi(iii, " ");
-            if(ReservedMorningWorkstations.contains(testi)) {
+            ReservedWorkstation reservedStations(iii, " ");
+            if(ReservedMorningWorkstations.contains(reservedStations)) {
                 workstationButtonGroup->button(0)->setChecked(true);
                 workstationButtonGroup->button(iii)->setEnabled(false);
                 workstationButtonGroup->button(iii)->setText(
                             QString::number(iii).append(" ")
-                            += ReservedMorningWorkstations.at(ReservedMorningWorkstations.indexOf(testi)).name);
+                            += ReservedMorningWorkstations.at(ReservedMorningWorkstations.indexOf(reservedStations)).name);
                 if(editedPersonShift == 0) {
                     workstationButtonGroup->button(editedPersonWorkstation)->setEnabled(true);
                     workstationButtonGroup->button(editedPersonWorkstation)->setChecked(true);
@@ -163,13 +162,13 @@ void AddDialog::updateWorkstationList()
     }
     if(day->isChecked()) {
         for(int iii = 1; iii <= numberOfWorkstations; iii++) {
-            ReservedWorkstation testi(iii, " ");
-            if(ReservedDayWorkstations.contains(testi)) {
+            ReservedWorkstation reservedStations(iii, " ");
+            if(ReservedDayWorkstations.contains(reservedStations)) {
                 workstationButtonGroup->button(0)->setChecked(true);
                 workstationButtonGroup->button(iii)->setEnabled(false);
                 workstationButtonGroup->button(iii)->setText(
                             QString::number(iii).append(" ")
-                            += ReservedDayWorkstations.at(ReservedDayWorkstations.indexOf(testi)).name);
+                            += ReservedDayWorkstations.at(ReservedDayWorkstations.indexOf(reservedStations)).name);
                 if(editedPersonShift == 1) {
                     workstationButtonGroup->button(editedPersonWorkstation)->setEnabled(true);
                     workstationButtonGroup->button(editedPersonWorkstation)->setChecked(true);
@@ -183,13 +182,13 @@ void AddDialog::updateWorkstationList()
     }
     if(evening->isChecked()) {
         for(int iii = 1; iii <= numberOfWorkstations; iii++) {
-            ReservedWorkstation testi(iii, " ");
-            if(ReservedEveningWorkstations.contains(testi)) {
+            ReservedWorkstation reservedStations(iii, " ");
+            if(ReservedEveningWorkstations.contains(reservedStations)) {
                 workstationButtonGroup->button(0)->setChecked(true);
                 workstationButtonGroup->button(iii)->setEnabled(false);
                 workstationButtonGroup->button(iii)->setText(
                             QString::number(iii).append(" ")
-                            += ReservedEveningWorkstations.at(ReservedEveningWorkstations.indexOf(testi)).name);
+                            += ReservedEveningWorkstations.at(ReservedEveningWorkstations.indexOf(reservedStations)).name);
                 if(editedPersonShift == 2) {
                     workstationButtonGroup->button(editedPersonWorkstation)->setEnabled(true);
                     workstationButtonGroup->button(editedPersonWorkstation)->setChecked(true);

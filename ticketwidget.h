@@ -27,7 +27,6 @@ SOFTWARE.
 
 #include "movablelabel.h"
 #include "mainwindow.h"
-#include "person.h"
 
 #include <QWidget>
 #include <QVector>
@@ -58,7 +57,6 @@ private:
     MovableLabel *nameLabel;
     MovableLabel *dateLabel;
 
-    //Not sure if needed yet
     //QVector<MovableLabel> customLabels;
 };
 

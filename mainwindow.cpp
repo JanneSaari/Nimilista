@@ -109,6 +109,9 @@ void MainWindow::createActions()
     shiftGroup->setExclusive(true);
     allShiftsAction->setChecked(true);
 
+    printTableAct = new QAction(tr("&Printtaa taulukko"), this);
+    connect(printTableAct, &QAction::triggered, namelistWidget, &NamelistWidget::printTable);
+
     connect(namelistWidget, &NamelistWidget::selectionChanged, this, &MainWindow::updateActions);
 }
 
@@ -125,6 +128,8 @@ void MainWindow::createMenus()
     toolMenu->addAction(editAct);
     toolMenu->addSeparator();
     toolMenu->addAction(removeAct);
+    toolMenu->addSeparator();
+    toolMenu->addAction(printTableAct);
 
     shiftMenu = menuBar()->addMenu(tr("&Vuoro"));
     shiftMenu->addAction(allShiftsAction);
@@ -173,10 +178,9 @@ void MainWindow::createTabs()
     namelistWidget = new NamelistWidget(this);
     ticketWidget = new TicketWidget(this);
     mainWidget->addTab(namelistWidget, tr("Nimilista"));
-    //mainWidget->addTab(ticketWidget, tr("Aterialippu"));
     setCentralWidget(mainWidget);
-    //setStyleSheet("QTabWidget::pane { border: 0; }");
     mainWidget->setCurrentIndex(0);
+    mainWidget->addTab(ticketWidget, tr("Lippu")); //Setting text and image positions to the ticket from program doesn't work correctly at the moment
 }
 
 void MainWindow::updateActions(const QItemSelection &selection)
@@ -216,7 +220,6 @@ void MainWindow::saveSettings()
 {
     QFile settingsFile("settings");
     if(!settingsFile.open(QIODevice::WriteOnly)) {
-        //ERROR here if needed
         return;
     }
     QDataStream out(&settingsFile);

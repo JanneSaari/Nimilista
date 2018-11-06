@@ -28,6 +28,7 @@ SOFTWARE.
 #include "tablemodel.h"
 #include "workstations.h"
 #include "person.h"
+#include "tableprinter.h"
 
 #include <QItemSelection>
 #include <QWidget>
@@ -65,6 +66,7 @@ public slots:
     void editEntry();
     void removeEntry();
     void changeShownShifts();
+    void printTable();
 
 signals:
     void selectionChanged(const QItemSelection &selected);
@@ -75,7 +77,6 @@ private:
     MainWindow *parent;
     QTableView *tableView;
     QSortFilterProxyModel *proxyModel;
-
 
     bool readingFromFile = false; //Used to prevent duplicate error while loading existing list from file.
     bool firstTimeOpening = true; //Prevents error when opening program for the first time.

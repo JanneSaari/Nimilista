@@ -33,7 +33,7 @@ SOFTWARE.
 #include "ticketwidget.h"
 
 //Handles printing list of tickets to PDF file.
-//Adds names of the people who are attending that day
+//Prints names of the people who are attending that day
 //and date to pre-definet positions.
 
 class TicketPrinter
@@ -42,8 +42,8 @@ public:
     TicketPrinter(QPicture ticket, TicketWidget *parent = nullptr);
     int printMealTickets();
 
-    //set placement testi
-    void setTestPlacement(QRectF placement);
+    //set placement
+    void setPlacement(QRectF placement);
 
 private:
     QPicture ticket;

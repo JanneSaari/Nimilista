@@ -40,7 +40,7 @@ int TicketPrinter::printMealTickets()
     printer.setOutputFormat(QPrinter::PdfFormat);
     printer.setOrientation(QPrinter::Landscape);
     printer.setResolution(300);
-    //TODO choose where to save pdf file
+    //TODO let the user choose where to save pdf file
     //QFileDialog opens the file selection popup and returns QString
     QFile pdfFile;
     //---------------------------------
@@ -57,7 +57,8 @@ int TicketPrinter::paintImages(QPrinter &printer)
     //TODO cleanup this function. Take "fill rest of the page"-part
     //from the end and make own function for it.
     //Use it to print full page of empty tickets and fill info if needed.
-    //ATM this function prints images for each person in listOfPeople,
+
+    //This function prints images for each person in listOfPeople,
     //who are attending today. And after that, fills rest of the page with empty images.
     QImage image(QDir::currentPath().append("/lippu.png"));
     //QImage logo(QDir::currentPath().append("/logo.png"));
@@ -84,9 +85,9 @@ int TicketPrinter::paintImages(QPrinter &printer)
     QRectF imageSourceSize(0.0, 0.0, image.width(), image.height());
     QPointF offset(imageSizeOnPage.width(), 0.0);
 
-    //Text placement relative to image
+    //Text placement relative to image.
     //All placements are relative to the image.
-    //The position of the image is changed by moving offset.
+    //The position of the image is changed by translating painter by offset.
     QRectF imagePlacement(QPointF(0.0, 0.0), imageSizeOnPage);
     textPlacement = QPointF(imageSizeOnPage.width() / 4, imageSizeOnPage.height() / 1.65);
     QPointF dayPlacement(imageSizeOnPage.width() / 3.1, imageSizeOnPage.height() / 1.38);
@@ -103,13 +104,13 @@ int TicketPrinter::paintImages(QPrinter &printer)
     int rowsOnPage = 0;
     QString department = parent->getDepartment();
 
-
     //TODO change this to QPicture. No need to repeat steps everytime. Try to get QPicture from ticket tab, then just add name and date if needed.
+    //Setting QPicture in ticketTab is not working correctly at the moment. I don't have time to get it working. The code is commented out in program.
+    //At the moment setting text position is hard coded in, so this would make using different tickets easier.
 
-    //Print images in 3*4 grid by translating painter by offset(image width on page, 0)
+    //Print images in 3*4 grid by translating painter by offset(QPointF(image width on page, 0))
     //After row is full, translate to start of the next row or next page, if the page is full
     //painter.scale(qreal(imageSizeOnPage.width() / ticket.width()), qreal(imageSizeOnPage.height() / ticket.height()));
-    //painter.scale(0.5, 0.5);
     foreach(const Person &person, listOfPeople){
         if (isAttendingToday(dayOfWeek, person)) {
             //Translate painter to the new row if current one is full
@@ -144,29 +145,30 @@ int TicketPrinter::paintImages(QPrinter &printer)
         }
     }
     //Fill rest of the page with tickets without name and date
-//    while (rowsOnPage < wantedRowsOnPage) {
-//        if(imagesOnRow >= wantedImagesOnRow){
-//            painter.translate(-imagesOnRow * imageSizeOnPage.width(), imageSizeOnPage.height());
-//            imagesOnRow = 0;
-//            rowsOnPage++;
-//        }
-//        if(rowsOnPage < wantedRowsOnPage && imagesOnRow < wantedImagesOnRow)
-//            painter.drawImage(imagePlacement, image, imageSourceSize);
-//            painter.drawImage(logoPlacement, logo, QRectF(0.0, 0.0f, logo.width(), logo.height()));
-//            painter.setPen(departmentPen);
-//            painter.setFont(QFont("Myriad Pro", 12));
-//            painter.drawText(departmentPlacement, department);
-//            painter.setFont(QFont("times", 14));
-//            painter.setPen(defaultPen);
-//            painter.translate(offset);
-//            imagesOnRow++;
-//    }
+    while (rowsOnPage < wantedRowsOnPage) {
+        if(imagesOnRow >= wantedImagesOnRow){
+            painter.translate(-imagesOnRow * imageSizeOnPage.width(), imageSizeOnPage.height());
+            imagesOnRow = 0;
+            rowsOnPage++;
+        }
+        if(rowsOnPage < wantedRowsOnPage && imagesOnRow < wantedImagesOnRow)
+            painter.drawImage(imagePlacement, image, imageSourceSize);
+            //painter.drawImage(logoPlacement, logo, QRectF(0.0, 0.0f, logo.width(), logo.height()));
+            painter.setPen(departmentPen);
+            painter.setFont(QFont("Myriad Pro", 12));
+            painter.drawText(departmentPlacement, department);
+            painter.setFont(QFont("times", 14));
+            painter.setPen(defaultPen);
+            painter.translate(offset);
+            imagesOnRow++;
+    }
     painter.end();
     return 0;
 }
 
 bool TicketPrinter::isAttendingToday(int DayOfWeek, Person person)
 {
+    //This could be moved to the ticketWidget and just send array of strings instead
     switch (DayOfWeek) {
     case 1:
         return person.isMonday;
@@ -190,7 +192,7 @@ int TicketPrinter::getDayOfTheWeek()
     return date.dayOfWeek();
 }
 
-void TicketPrinter::setTestPlacement(QRectF placement)
+void TicketPrinter::setPlacement(QRectF placement)
 {
     logoPlacement = placement;
 }

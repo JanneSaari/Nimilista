@@ -30,6 +30,8 @@
 **
 ****************************************************************************/
 
+//https://github.com/T0ny0/Qt-Table-Printer
+
 #include "tableprinter.h"
 
 #include <QAbstractItemModel>
@@ -53,7 +55,7 @@ TablePrinter::TablePrinter(QPainter* painter, QPrinter* printer) :
     contentFont = painter->font();
     headerColor = painter->pen().color();
     contentColor = painter->pen().color();
-    prepare = NULL;
+    prepare = nullptr;
     error = "No error";
 }
 

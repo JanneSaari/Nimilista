@@ -30,6 +30,8 @@
 **
 ****************************************************************************/
 
+//https://github.com/T0ny0/Qt-Table-Printer
+
 #ifndef TABLEPRINTER_H
 #define TABLEPRINTER_H
 

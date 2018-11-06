@@ -26,7 +26,6 @@ SOFTWARE.
 #include "ticketprinter.h"
 
 #include <QDir>
-#include <QPixmap>
 #include <QDate>
 #include <QPainter>
 
@@ -44,6 +43,7 @@ TicketWidget::TicketWidget(MainWindow *parent)
     logoLabel->setPixmap(logoImage.scaledToWidth(logoScaledWidth, Qt::SmoothTransformation));
     logoLabel->setGeometry(0, 0, logoScaledWidth, logoImage.scaledToWidth(logoScaledWidth).height());
 
+    //These are used in the second tab that can change positions in program. Currently this feature is not in use and the code is commented out.
 //    nameLabel = new MovableLabel(this);
 //    nameLabel->setGeometry(200, 150, 300, 250);
 //    nameLabel->setText(tr("Esimerkki Nimi"));
@@ -65,7 +65,7 @@ void TicketWidget::printTickets()
     ticket.save("ticket");
 
     TicketPrinter testi(ticket, this);
-    testi.setTestPlacement(logoLabel->geometry());
+    testi.setPlacement(logoLabel->geometry());
     testi.printMealTickets();
 }
 

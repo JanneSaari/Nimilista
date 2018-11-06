@@ -28,13 +28,6 @@ SOFTWARE.
 #include <QString>
 #include <QDataStream>
 
-enum Shift
-{
-    Morning,
-    Day,
-    Evening
-};
-
 class Person
 {
 public:

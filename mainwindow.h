@@ -93,6 +93,7 @@ private:
     QAction *printAct;
     QAction *setDepartmentAction;
     QAction *openImageAct;
+    QAction *printTableAct;
 
     QActionGroup *shiftGroup;
     QAction *allShiftsAction;
