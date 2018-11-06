@@ -57,6 +57,7 @@ TicketWidget::TicketWidget(MainWindow *parent)
 
 void TicketWidget::printTickets()
 {
+    //Saves created QPicture from ticketTab before drawing it. This feature isn't enabled yet and there is no option to undo
     QPainter painter;
     painter.begin(&ticket);
     painter.drawPixmap(imageLabel->geometry(), ticketImage, ticketImage.rect());
