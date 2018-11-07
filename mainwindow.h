@@ -59,7 +59,7 @@ private:
     void createActions();
     void createMenus();
     void createButtons();
-    void createTabs();
+    void createWidgets();
     void saveSettings();
     void loadSettings();
     void openDepartmentDialog();
@@ -91,6 +91,7 @@ private:
     QAction *removeAct;
     QAction *addAct;
     QAction *printAct;
+    QAction *fillPageAct;
     QAction *setDepartmentAction;
     QAction *openImageAct;
     QAction *printTableAct;

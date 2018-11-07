@@ -53,20 +53,21 @@ private:
     QPainter *painter;
     QList<Person> listOfPeople;
     QString department;
+    QImage image;
 
     int wantedImagesOnRow = 3;
     int wantedRowsOnPage = 4;
     int rowsOnPage = 0;
     int imagesOnRow = 0;
-    bool fillRestOfThePage = false;
-    QImage image;
+
     QPointF textPlacement;
-    QRectF logoPlacement;
     QRectF imagePlacement;
+    QRectF logoPlacement;
     QPointF dayPlacement;
     QPointF monthPlacement;
     QPointF yearPlacement;
     QPointF departmentPlacement;
+
     QRectF pageSize;
     QSizeF imageSizeOnPage;
     QRectF imageSourceSize;

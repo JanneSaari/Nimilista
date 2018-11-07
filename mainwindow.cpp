@@ -24,8 +24,8 @@ SOFTWARE.
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
 #include "departmentdialog.h"
+#include "ticketprinter.h"
 
 #include <QAction>
 #include <QFileDialog>
@@ -36,12 +36,12 @@ MainWindow::MainWindow()
 {
     resize(1200, 800);
     mainWidget = new QTabWidget(this);
-    createTabs();
+    createWidgets();
+    loadSettings();
     createActions();
     createMenus();
     createButtons();
     setWindowTitle("Nimilista");
-    loadSettings();
     if(department.isEmpty())
         openDepartmentDialog();
 }
@@ -75,6 +75,13 @@ void MainWindow::createActions()
 
     printAct = new QAction(tr("&Piirrä aterialiput"), this);
     connect(printAct, &QAction::triggered, ticketWidget, &TicketWidget::printTickets);
+
+    fillPageAct = new QAction(tr("&Täytä loppusivu tyhjillä lipuilla"), this);
+    fillPageAct->setCheckable(true);
+    connect(fillPageAct, &QAction::triggered, [this](){
+        ticketWidget->fillPageWithEmptyTickets = fillPageAct->isChecked();
+    });
+    fillPageAct->setChecked(ticketWidget->fillPageWithEmptyTickets);
 
     setDepartmentAction = new QAction(tr("&Aseta paja"), this);
     connect(setDepartmentAction, &QAction::triggered, this, &MainWindow::openDepartmentDialog);
@@ -144,6 +151,7 @@ void MainWindow::createMenus()
     ticketMenu = menuBar()->addMenu(tr("&Aterialiput"));
     ticketMenu->addAction(printAct);
     ticketMenu->addAction(setDepartmentAction);
+    ticketMenu->addAction(fillPageAct);
 }
 
 void MainWindow::createButtons()
@@ -177,7 +185,7 @@ void MainWindow::createButtons()
     connect(drawTicketsButton, &QPushButton::clicked, ticketWidget, &TicketWidget::printTickets);
 }
 
-void MainWindow::createTabs()
+void MainWindow::createWidgets()
 {
     namelistWidget = new NamelistWidget(this);
     ticketWidget = new TicketWidget(this);
@@ -227,7 +235,7 @@ void MainWindow::saveSettings()
         return;
     }
     QDataStream out(&settingsFile);
-    out << department;
+    out << department << ticketWidget->fillPageWithEmptyTickets;
 }
 
 void MainWindow::loadSettings()
@@ -237,7 +245,7 @@ void MainWindow::loadSettings()
         return;
     }
     QDataStream in(&settingsFile);
-    in >> department;
+    in >> department >> ticketWidget->fillPageWithEmptyTickets;
 }
 
 void MainWindow::openDepartmentDialog()

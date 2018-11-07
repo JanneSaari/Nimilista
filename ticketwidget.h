@@ -43,6 +43,7 @@ public:
     QString getDepartment() const;
 
     MainWindow *parent;
+    bool fillPageWithEmptyTickets;
 
 public slots:
     void printTickets();

@@ -99,7 +99,7 @@ int TicketPrinter::paintImages(QPrinter &printer)
     QString year = QDate::currentDate().toString("yyyy");
     QString department = parent->getDepartment();
 
-    //TODO change this to QPicture. No need to repeat steps everytime. Try to get QPicture from ticket tab, then just add name and date if needed.
+    //TODO change this to QPicture. Try to get QPicture from ticket tab, then just add name and date if needed.
     //Setting QPicture in ticketTab is not working correctly at the moment. I don't have time to get it working. The code is commented out in program.
     //At the moment setting text position is hard coded in, so this would make using different tickets easier.
 
@@ -140,7 +140,7 @@ int TicketPrinter::paintImages(QPrinter &printer)
         }
     }
 
-    if(fillRestOfThePage){
+    if(parent->fillPageWithEmptyTickets){
         fillPage();
     }
 
