@@ -71,8 +71,7 @@ int TicketPrinter::paintImages(QPrinter &printer)
     //Grey font color #6F6F6E (not used at the moment)
     //font Myriad Pro
     QColor departmentColor("#19A146");
-    QPen defaultPen;
-    QPen departmentPen(departmentColor);
+    departmentPen = QPen(departmentColor);
     painter->setFont(QFont("times", 14));
 
     //Page and image settings
@@ -173,7 +172,7 @@ void TicketPrinter::fillPage()
 
 bool TicketPrinter::isAttendingToday(int DayOfWeek, Person person)
 {
-    //This could be moved to the ticketWidget and just send array of strings instead
+    //This could be moved to the namelistWidget and just send array of strings instead
     switch (DayOfWeek) {
     case 1:
         return person.isMonday;
