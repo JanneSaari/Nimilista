@@ -3,6 +3,8 @@ Koodi on löydettävissä myös https://github.com/JanneSaari/Nimilista
 
 Ohjelman tekeminen Windowsille käy helpoiten seuraamalla ohjeita http://doc.qt.io/qt-5/windows-deployment.html
 
+Ruokaliput piirretään kaikille sinä päivänä osallistujille, taulukko piirretään vain valitulle vuorolle.
+
 
 Main
 	->MainWindow
