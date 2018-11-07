@@ -27,7 +27,6 @@ SOFTWARE.
 
 #include "namelistwidget.h"
 #include "ticketwidget.h"
-#include "person.h"
 
 #include <QMainWindow>
 #include <QTabWidget>
@@ -41,6 +40,7 @@ class TicketWidget;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
+
 
 public:
     MainWindow();

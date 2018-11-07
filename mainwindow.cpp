@@ -80,9 +80,13 @@ void MainWindow::createActions()
     connect(setDepartmentAction, &QAction::triggered, this, &MainWindow::openDepartmentDialog);
 
     allShiftsAction = new QAction(tr("&Kaikki vuorot"), this);
+    allShiftsAction->setCheckable(true);
     morningShiftAction = new QAction(tr("&Aamuvuoro"), this);
+    morningShiftAction->setCheckable(true);
     dayShiftAction = new QAction(tr("&Päivävuoro"), this);
+    dayShiftAction->setCheckable(true);
     eveningShiftAction = new QAction(tr("&Iltavuoro"), this);
+    eveningShiftAction->setCheckable(true);
 
     connect(allShiftsAction, &QAction::triggered, [this](){
         namelistWidget->shownShifts = Shifts::ALL_SHIFTS;
