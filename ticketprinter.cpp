@@ -30,8 +30,14 @@ SOFTWARE.
 TicketPrinter::TicketPrinter(QPicture ticket, TicketWidget *parent)
     :ticket(ticket), parent(parent)
 {
+    painter = new QPainter();
     listOfPeople = parent->parent->getPeople();
     department = parent->getDepartment();
+}
+
+TicketPrinter::~TicketPrinter()
+{
+    delete(painter);
 }
 
 int TicketPrinter::printMealTickets()
@@ -49,18 +55,13 @@ int TicketPrinter::printMealTickets()
 }
 
 int TicketPrinter::paintImages(QPrinter &printer)
-{   
-    //TODO cleanup this function. Take "fill rest of the page"-part
-    //from the end and make own function for it.
-    //Use it to print full page of empty tickets and fill info if needed.
-
+{
     //This function prints images for each person in listOfPeople,
     //who are attending today. And after that, fills rest of the page with empty images.
-    QImage image(QDir::currentPath().append("/lippu.png"));
+    image = QImage(QDir::currentPath().append("/lippu.png"));
     //QImage logo(QDir::currentPath().append("/logo.png"));
 
-    QPainter painter;
-    if(!painter.begin(&printer)) {
+    if(!painter->begin(&printer)) {
         qWarning("Tiedostoa ei pystytty avaamaan.");
         return 1;
     }
@@ -72,32 +73,30 @@ int TicketPrinter::paintImages(QPrinter &printer)
     QColor departmentColor("#19A146");
     QPen defaultPen;
     QPen departmentPen(departmentColor);
-    painter.setFont(QFont("times", 14));
+    painter->setFont(QFont("times", 14));
 
     //Page and image settings
-    QRectF pageSize = printer.pageRect();
+    pageSize = printer.pageRect();
     //QRectF pageRect = pageSize.rectPixels(300);
-    QSizeF imageSizeOnPage(pageSize.width() / wantedImagesOnRow, pageSize.height() / wantedRowsOnPage);
-    QRectF imageSourceSize(0.0, 0.0, image.width(), image.height());
-    QPointF offset(imageSizeOnPage.width(), 0.0);
+    imageSizeOnPage = QSizeF(pageSize.width() / wantedImagesOnRow, pageSize.height() / wantedRowsOnPage);
+    imageSourceSize = QRectF(0.0, 0.0, image.width(), image.height());
+    offset = QPointF(imageSizeOnPage.width(), 0.0);
 
     //Text placement relative to image.
     //All placements are relative to the image.
     //The position of the image is changed by translating painter by offset.
-    QRectF imagePlacement(QPointF(0.0, 0.0), imageSizeOnPage);
+    imagePlacement = QRectF(QPointF(0.0, 0.0), imageSizeOnPage);
     textPlacement = QPointF(imageSizeOnPage.width() / 4, imageSizeOnPage.height() / 1.65);
-    QPointF dayPlacement(imageSizeOnPage.width() / 3.1, imageSizeOnPage.height() / 1.38);
-    QPointF monthPlacement(imageSizeOnPage.width() / 2.3, imageSizeOnPage.height() / 1.38);
-    QPointF yearPlacement(imageSizeOnPage.width() / 1.75, imageSizeOnPage.height() / 1.38);
-    QPointF departmentPlacement(imageSizeOnPage.width() / 7.6, imageSizeOnPage.height() / 2.30);
+    dayPlacement = QPointF(imageSizeOnPage.width() / 3.1, imageSizeOnPage.height() / 1.38);
+    monthPlacement = QPointF(imageSizeOnPage.width() / 2.3, imageSizeOnPage.height() / 1.38);
+    yearPlacement = QPointF(imageSizeOnPage.width() / 1.75, imageSizeOnPage.height() / 1.38);
+    departmentPlacement = QPointF(imageSizeOnPage.width() / 7.6, imageSizeOnPage.height() / 2.30);
     //QRectF logoPlacement(QPointF(150.0, 20.0), QPointF(600.0, 200.0));
 
     int dayOfWeek = getDayOfTheWeek();
     QString day = QDate::currentDate().toString("d");
     QString month = QDate::currentDate().toString("M");
     QString year = QDate::currentDate().toString("yyyy");
-    int imagesOnRow = 0;
-    int rowsOnPage = 0;
     QString department = parent->getDepartment();
 
     //TODO change this to QPicture. No need to repeat steps everytime. Try to get QPicture from ticket tab, then just add name and date if needed.
@@ -111,7 +110,7 @@ int TicketPrinter::paintImages(QPrinter &printer)
         if (isAttendingToday(dayOfWeek, person)) {
             //Translate painter to the new row if current one is full
             if(imagesOnRow >= wantedImagesOnRow){
-                painter.translate(-imagesOnRow * imageSizeOnPage.width(), imageSizeOnPage.height());
+                painter->translate(-imagesOnRow * imageSizeOnPage.width(), imageSizeOnPage.height());
                 imagesOnRow = 0;
                 rowsOnPage++;
             }
@@ -122,44 +121,54 @@ int TicketPrinter::paintImages(QPrinter &printer)
                         return 1;
                     }
                     rowsOnPage = 0;
-                    painter.resetTransform();
+                    painter->resetTransform();
             }
             //painter.drawPicture(0, 0, ticket);
-            painter.drawImage(imagePlacement, image, imageSourceSize);
+            painter->drawImage(imagePlacement, image, imageSourceSize);
             //painter.drawImage(logoPlacement, logo, QRectF(0.0, 0.0f, logo.width(), logo.height()));
-            painter.drawText(textPlacement, person.name);
-            painter.drawText(dayPlacement, day);
-            painter.drawText(monthPlacement, month);
-            painter.drawText(yearPlacement, year);
-            painter.setFont(QFont("times", 12));
-            painter.setPen(departmentPen);
-            painter.drawText(departmentPlacement, department);
-            painter.setFont(QFont("times", 14));
-            painter.setPen(defaultPen);
-            painter.translate(offset); //Move painter to the right by width of one ticket on page
+            painter->drawText(textPlacement, person.name);
+            painter->drawText(dayPlacement, day);
+            painter->drawText(monthPlacement, month);
+            painter->drawText(yearPlacement, year);
+            painter->setFont(QFont("times", 12));
+            painter->setPen(departmentPen);
+            painter->drawText(departmentPlacement, department);
+            painter->setFont(QFont("times", 14));
+            painter->setPen(defaultPen);
+            painter->translate(offset); //Move painter to the right by width of one ticket on page
             imagesOnRow++;
         }
     }
+
+    if(fillRestOfThePage){
+        fillPage();
+    }
+
+    painter->end();
+
+    return 0;
+}
+
+void TicketPrinter::fillPage()
+{
     //Fill rest of the page with tickets without name and date
     while (rowsOnPage < wantedRowsOnPage) {
         if(imagesOnRow >= wantedImagesOnRow){
-            painter.translate(-imagesOnRow * imageSizeOnPage.width(), imageSizeOnPage.height());
+            painter->translate(-imagesOnRow * imageSizeOnPage.width(), imageSizeOnPage.height());
             imagesOnRow = 0;
             rowsOnPage++;
         }
         if(rowsOnPage < wantedRowsOnPage && imagesOnRow < wantedImagesOnRow)
-            painter.drawImage(imagePlacement, image, imageSourceSize);
+            painter->drawImage(imagePlacement, image, imageSourceSize);
             //painter.drawImage(logoPlacement, logo, QRectF(0.0, 0.0f, logo.width(), logo.height()));
-            painter.setPen(departmentPen);
-            painter.setFont(QFont("Myriad Pro", 12));
-            painter.drawText(departmentPlacement, department);
-            painter.setFont(QFont("times", 14));
-            painter.setPen(defaultPen);
-            painter.translate(offset);
+            painter->setPen(departmentPen);
+            painter->setFont(QFont("Myriad Pro", 12));
+            painter->drawText(departmentPlacement, department);
+            painter->setFont(QFont("times", 14));
+            painter->setPen(defaultPen);
+            painter->translate(offset);
             imagesOnRow++;
     }
-    painter.end();
-    return 0;
 }
 
 bool TicketPrinter::isAttendingToday(int DayOfWeek, Person person)

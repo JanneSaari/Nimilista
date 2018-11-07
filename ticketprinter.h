@@ -40,6 +40,7 @@ class TicketPrinter
 {
 public:
     TicketPrinter(QPicture ticket, TicketWidget *parent = nullptr);
+    ~TicketPrinter();
     int printMealTickets();
 
     //set placement
@@ -55,10 +56,28 @@ private:
 
     int wantedImagesOnRow = 3;
     int wantedRowsOnPage = 4;
+    int rowsOnPage = 0;
+    int imagesOnRow = 0;
+    bool fillRestOfThePage = false;
+    QImage image;
     QPointF textPlacement;
     QRectF logoPlacement;
+    QRectF imagePlacement;
+    QPointF dayPlacement;
+    QPointF monthPlacement;
+    QPointF yearPlacement;
+    QPointF departmentPlacement;
+    QRectF pageSize;
+    QSizeF imageSizeOnPage;
+    QRectF imageSourceSize;
+    QPointF offset;
+
+    QColor departmentColor;
+    QPen defaultPen;
+    QPen departmentPen;
 
     int paintImages(QPrinter &printer);
+    void fillPage();
     int getDayOfTheWeek();
     int getCurrentDate();
     bool isAttendingToday(int dayOfWeek, Person person);
